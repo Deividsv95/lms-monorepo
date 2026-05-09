@@ -876,5 +876,6 @@ function wireEvents() {
   renderSession();
   renderCourses();
   await loadCourses();
+  await loadUsers();
   await loadEnrollments();
 })();

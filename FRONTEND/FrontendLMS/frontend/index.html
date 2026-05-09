@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LMS Frontend (HTML/CSS/JS)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  
+  <div class="bg-grid"></div>
+  <div class="bg-orb bg-orb-a"></div>
+  <div class="bg-orb bg-orb-b"></div>
+
+  <header class="topbar" role="banner">
+    <div>
+      <h1>LMS Portal</h1>
+    </div>
+    <div class="topbar-actions">
+      <div class="presence-pill">
+        <span class="presence-dot"></span>
+        <span id="sessionState">Guest mode</span>
+      </div>
+      <button id="logoutBtn" class="btn ghost" hidden>Logout</button>
+    </div>
+  </header>
+
+  <main class="layout" id="main">
+    <section class="hero-card card auth-card">
+      <div class="hero-copy">
+        <h2>Role-Based Learning Management</h2>
+        <p class="hero-text">Switch between student, teacher, and admin modes to access role-specific tools and course management.</p>
+
+        <div class="hero-stats" aria-label="Dashboard stats">
+          <article class="stat-tile">
+            <span class="stat-label">Session</span>
+            <strong id="sessionRoleValue">Guest</strong>
+          </article>
+          <article class="stat-tile">
+            <span class="stat-label">Visible courses</span>
+            <strong id="courseCountValue">0</strong>
+          </article>
+          <article class="stat-tile">
+            <span class="stat-label">Student enrollments</span>
+            <strong id="enrollmentCountValue">0</strong>
+          </article>
+        </div>
+      </div>
+
+      <div class="card-body session-card-panel">
+        <div class="panel-head">
+          <div>
+            <h2>Sign In</h2>
+          </div>
+          <span id="roleAccent" class="role-chip">No role</span>
+        </div>
+
+        <form id="loginForm" class="stack" aria-label="User authentication form">
+          <label for="userProfile">
+            User Profile
+            <select id="userProfile" name="userId" required aria-label="Select user profile">
+              <option value="3">Student</option>
+              <option value="2">Teacher</option>
+              <option value="1">Admin</option>
+            </select>
+          </label>
+          <label for="username">
+            Username
+            <input id="username" name="username" type="text" placeholder="student_demo" autocomplete="username" required aria-label="Username for login" />
+          </label>
+          <label for="password">
+            Password
+            <input id="password" name="password" type="password" placeholder="Enter password" autocomplete="current-password" minlength="6" required aria-label="Password for login" />
+          </label>
+          <button class="btn primary" type="submit">Start Session</button>
+        </form>
+
+        <p id="authMessage" class="message"></p>
+      </div>
+    </section>
+
+    <section class="card profile-card">
+      <div class="section-head">
+        <div>
+          <h2>Session Status</h2>
+        </div>
+        <div class="small-actions no-margin">
+          <button id="loadProfileBtn" class="btn line">Refresh</button>
+          <button id="loadEnrollmentsBtn" class="btn line">Enrollments</button>
+        </div>
+      </div>
+      <div id="profileOutput" class="profile-summary">Not logged in</div>
+    </section>
+
+    <aside class="card insight-card">
+      <h2 id="roleSummaryTitle">Role Info</h2>
+      <p id="roleSummary">Start as a student, teacher, or admin to load role-specific course access and management tools.</p>
+      <div class="insight-rail">
+        <span class="insight-pill">Student enrollments</span>
+        <span class="insight-pill">Teacher publishing</span>
+        <span class="insight-pill">Admin controls</span>
+      </div>
+      <pre id="enrollmentsOutput" hidden></pre>
+    </aside>
+
+    <section class="card courses-card">
+      <div class="courses-head">
+        <div>
+          <h2>Available Courses</h2>
+        </div>
+        <button id="loadCoursesBtn" class="btn line">Refresh</button>
+      </div>
+
+      <div id="coursesList" class="courses-list"></div>
+    </section>
+
+    <section id="managementSection" class="card management-card" hidden>
+      <div class="courses-head">
+        <div>
+          <h2>Course & User Management</h2>
+        </div>
+      </div>
+      <p id="managementHint" class="hint">Teacher and admin actions will appear here after starting a session.</p>
+
+      <section class="management-block">
+        <h3>Create Course</h3>
+        <form id="courseCreateForm" class="stack">
+          <div class="management-grid">
+            <label>
+              Title
+              <input name="title" type="text" placeholder="New course title" />
+            </label>
+            <label class="management-span-2">
+              Description
+              <textarea name="description" rows="4" placeholder="New course description"></textarea>
+            </label>
+          </div>
+          <div class="small-actions">
+            <button id="courseCreateBtn" class="btn primary" type="button">Create Course</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="management-block">
+        <h3>Delete Course</h3>
+        <p id="courseManageHint" class="hint">Teachers select a course to delete. Admins can enter a course ID to delete.</p>
+        <form id="courseManageForm" class="stack">
+          <div class="management-grid">
+            <label id="courseSelectWrap">
+              Course
+              <select name="courseId">
+                <option value="">Select a course</option>
+              </select>
+            </label>
+            <label id="courseIdWrap" hidden>
+              Course ID
+              <input name="courseIdManual" type="number" min="1" placeholder="Enter course ID" />
+            </label>
+          </div>
+          <div class="small-actions">
+            <button id="courseDeleteBtn" class="btn danger" type="button">Delete Course</button>
+          </div>
+        </form>
+      </section>
+
+      <section id="userManageSection" class="management-block" hidden>
+        <h3>User Management</h3>
+        <div class="management-split">
+          <section class="management-panel">
+            <h4>Available Users</h4>
+            <p class="hint">Only admin can view and remove user accounts.</p>
+            <div id="usersList" class="courses-list"></div>
+          </section>
+
+          <section class="management-panel">
+            <h4>Create User</h4>
+            <p class="hint">Add a new student, teacher, or admin account.</p>
+            <form id="userCreateForm" class="stack compact-stack">
+              <div class="management-grid single-column-grid">
+                <label>
+                  Name
+                  <input name="name" type="text" placeholder="Enter name" />
+                </label>
+                <label>
+                  Role
+                  <select name="role">
+                    <option value="student">Student</option>
+                    <option value="teacher">Teacher</option>
+                    <option value="admin">Admin</option>
+                  </select>
+                </label>
+              </div>
+              <div class="small-actions">
+                <button id="userCreateBtn" class="btn primary" type="button">Create</button>
+              </div>
+            </form>
+          </section>
+
+          <section class="management-panel">
+            <h4>Delete User</h4>
+            <p class="hint">Enter a user ID to remove the account.</p>
+            <form id="userManageForm" class="stack compact-stack">
+              <div class="management-grid single-column-grid">
+                <label>
+                  User ID
+                  <input name="userId" type="number" min="1" placeholder="Existing user ID" />
+                </label>
+              </div>
+              <div class="small-actions">
+                <button id="userDeleteBtn" class="btn danger" type="button">Delete</button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </section>
+
+      <section class="management-block">
+        <h3>Response</h3>
+        <pre id="managementOutput">No actions yet.</pre>
+      </section>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>

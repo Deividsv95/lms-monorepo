@@ -16,8 +16,8 @@ A REST API that powers a learning management system — students enroll in cours
 ## Quick Start
 
 ```bash
-python -m venv .venv
-.venv\Scripts\activate        # Windows — use: source .venv/bin/activate on macOS/Linux
+python -m venv venv
+venv\Scripts\activate        # Windows — use: source venv/bin/activate on macOS/Linux
 pip install -r requirements.txt
 echo SECRET_KEY=replace-this-with-a-real-key > .env
 python manage.py migrate
@@ -34,8 +34,48 @@ API is live at **http://127.0.0.1:8000**
 - **JWT authentication** — login returns `access` + `refresh` tokens
 - **3 roles** — student (enroll), teacher (manage own courses), admin (manage everything)
 - **Role enforcement** — wrong-role requests return 403 automatically
+- **Token refresh** — `POST /api/auth/token/refresh/` issues a new access token
 - **Ready-to-use demo accounts** — one command seeds student, teacher, and admin users
-- **22 passing tests** — auth, permissions, and enrollment all covered
+- **24 passing tests** — auth, permissions, enrollment, and cross-role data sync all covered
+
+---
+
+## API Endpoints
+
+### Auth — `/api/auth/`
+
+| Method | Path | Description |
+|--------|------|-------------|
+| POST | `/api/auth/register/` | Create a new account |
+| POST | `/api/auth/login/` | Login — returns `access` + `refresh` tokens |
+| POST | `/api/auth/logout/` | Blacklist the refresh token |
+| POST | `/api/auth/token/refresh/` | Get a new access token |
+
+### Student — requires `role=student`
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/student/courses/` | List all available courses |
+| POST | `/api/student/enroll/<course_id>/` | Enroll in a course |
+| GET | `/api/student/enrolled-courses/` | List enrolled courses |
+
+### Teacher — requires `role=teacher`
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET | `/api/teacher/courses/` | List all courses |
+| POST | `/api/teacher/courses/` | Create a course |
+| PUT/PATCH | `/api/teacher/courses/<course_id>/` | Update own course |
+| DELETE | `/api/teacher/courses/<course_id>/` | Delete own course |
+
+### Admin — requires `role=admin`
+
+| Method | Path | Description |
+|--------|------|-------------|
+| GET/POST | `/api/admin/courses/` | List or create any course |
+| PUT/PATCH/DELETE | `/api/admin/courses/<course_id>/` | Update or delete any course |
+| GET/POST | `/api/admin/users/` | List or create users |
+| GET/PUT/PATCH/DELETE | `/api/admin/users/<user_id>/` | Manage any user |
 
 ---
 
@@ -43,14 +83,15 @@ API is live at **http://127.0.0.1:8000**
 
 **1. Login**
 
-```js
-const res = await fetch("http://127.0.0.1:8000/api/auth/login/", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({ username: "student_demo", password: "Student@123" }),
-});
-const { access, user } = await res.json();
-// user.role tells you which endpoints this user can call
+```bash
+curl -X POST http://127.0.0.1:8000/api/auth/login/ \
+  -H "Content-Type: application/json" \
+  -d '{"username": "student_demo", "password": "Student@123"}'
+```
+
+Response:
+```json
+{ "access": "<jwt>", "refresh": "<jwt>", "user": { "id": 3, "username": "student_demo", "role": "student" } }
 ```
 
 **2. Use the token**
@@ -69,11 +110,21 @@ Authorization: Bearer <access>
 
 **4. What each role can do**
 
-| Role | Can do |
+| Role | Permissions |
 |---|---|
 | Student | Browse courses, enroll, view own enrollments |
-| Teacher | Create, update, delete their own courses |
-| Admin | All of the above plus manage any course or user |
+| Teacher | Create, update, delete their own courses; view all courses |
+| Admin | Manage any course or user account |
+
+---
+
+## Running Tests
+
+```bash
+python manage.py test -v 2
+```
+
+24 tests cover authentication, role-based permissions, enrollment logic, and cross-role data sync.
 
 ---
 

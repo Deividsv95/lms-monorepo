@@ -73,6 +73,7 @@ const state = {
   courses: [],
   users: [],
   user: loadStoredUser(),
+  ws: null, // WebSocket connection for real-time updates
 };
 
 function loadStoredUser() {
@@ -227,6 +228,7 @@ function updateDashboardMetrics() {
 }
 
 function clearSession() {
+  disconnectWebSocket();
   saveSession(null);
   state.courses = [];
   state.users = [];
@@ -295,6 +297,93 @@ function requireValue(value, message) {
   if (!value) {
     throw new Error(message);
   }
+}
+
+function connectWebSocket() {
+  const user = activeUser();
+  
+  if (!user || !user.accessToken) {
+    console.log("WebSocket: No authenticated user");
+    return;
+  }
+
+  // Convert HTTP/HTTPS to WS/WSS
+  const wsProtocol = apiBase().startsWith("https") ? "wss" : "ws";
+  const wsUrl = `${wsProtocol}://${window.location.host}/ws/courses/?token=${user.accessToken}`;
+  
+  try {
+    state.ws = new WebSocket(wsUrl);
+    
+    state.ws.onopen = () => {
+      console.log("WebSocket connected");
+    };
+    
+    state.ws.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        console.log("Course update received:", data);
+        
+        if (data.type === "course_update") {
+          handleCourseUpdate(data);
+        }
+      } catch (error) {
+        console.error("Error parsing WebSocket message:", error);
+      }
+    };
+    
+    state.ws.onerror = (error) => {
+      console.error("WebSocket error:", error);
+    };
+    
+    state.ws.onclose = () => {
+      console.log("WebSocket disconnected");
+      state.ws = null;
+    };
+  } catch (error) {
+    console.error("Failed to establish WebSocket:", error);
+  }
+}
+
+function disconnectWebSocket() {
+  if (state.ws) {
+    state.ws.close();
+    state.ws = null;
+  }
+}
+
+function handleCourseUpdate(data) {
+  const { event, course } = data;
+  
+  if (!course) return;
+  
+  switch (event) {
+    case "course_created":
+      // Add new course to list
+      if (!state.courses.find(c => c.id === course.id)) {
+        state.courses.push(course);
+        console.log("Course added:", course.title);
+      }
+      break;
+      
+    case "course_updated":
+      // Update existing course
+      const existingIndex = state.courses.findIndex(c => c.id === course.id);
+      if (existingIndex >= 0) {
+        state.courses[existingIndex] = course;
+        console.log("Course updated:", course.title);
+      }
+      break;
+      
+    case "course_deleted":
+      // Remove course from list
+      state.courses = state.courses.filter(c => c.id !== course.id);
+      console.log("Course deleted:", course.title);
+      break;
+  }
+  
+  // Update UI
+  renderSession();
+  renderCourses();
 }
 
 function loadedCourseNames() {
@@ -561,6 +650,7 @@ async function handleSessionStart(event) {
     saveSession(sessionUser);
     setMessage("");
     await refreshSessionData();
+    connectWebSocket();
     const roleLabel = ROLE_CONFIG[sessionUser.role] ? ROLE_CONFIG[sessionUser.role].label : "User";
     setMessage(`Session started as ${roleLabel} (${sessionUser.username}).`);
   } catch (error) {

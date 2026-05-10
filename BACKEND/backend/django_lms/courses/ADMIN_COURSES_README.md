@@ -2,7 +2,16 @@
 
 ## Overview
 
-This implementation enables administrators to create and delete courses, with real-time synchronization across all connected users via WebSocket.
+This implementation provides **admin course management** with **real-time WebSocket synchronization**. Admins can create, update, and delete any course, and all changes are instantly broadcast to all connected users (students, teachers, and other admins) without requiring page refreshes.
+
+## Key Capabilities
+
+✅ **Admin Full Control** — Admins can create, update, and delete any course (not restricted to courses they created)  
+✅ **Real-Time Synchronization** — All course changes broadcast to connected users via WebSocket  
+✅ **Cross-Role Visibility** — Students can see courses created by teachers AND admins  
+✅ **Automatic UI Updates** — Course lists update instantly for all users without page reload  
+✅ **JWT Authentication** — WebSocket connections secured with JWT tokens  
+✅ **Graceful Fallback** — In-memory channel layer for development, Redis for production  
 
 ## Features
 
@@ -10,44 +19,73 @@ This implementation enables administrators to create and delete courses, with re
 
 #### Create Course (Admin Only)
 - **Endpoint**: `POST /api/courses/admin/courses/`
-- **Permission**: Admin role required
+- **Permission**: `IsAdminRole` required
 - **Request Body**:
 ```json
 {
-  "title": "Advanced Python",
-  "description": "Learn advanced Python concepts"
+  "title": "Advanced Python Programming",
+  "description": "Master advanced Python concepts and best practices"
 }
 ```
-- **Response**: Returns the created course with ID, timestamps, and creator info
+- **Response**: Returns the created course object
 - **Status**: 201 Created
 
-#### Update Course (Admin Only)
+#### Update Course (Full Update - Admin Only)
 - **Endpoint**: `PUT /api/courses/admin/courses/<course_id>/`
+- **Permission**: `IsAdminRole` required
+- **Request Body**: Complete course data required
+```json
+{
+  "title": "Updated Title",
+  "description": "Updated description"
+}
+```
+- **Response**: Returns the updated course object
+- **Status**: 200 OK
+
+#### Partial Update (Admin Only)
 - **Endpoint**: `PATCH /api/courses/admin/courses/<course_id>/`
-- **Permission**: Admin role required
-- **Description**: Admins can update any course (regardless of who created it)
+- **Permission**: `IsAdminRole` required
+- **Request Body**: Only fields to update
+```json
+{
+  "title": "New Title"
+}
+```
+- **Status**: 200 OK
 
 #### Delete Course (Admin Only)
 - **Endpoint**: `DELETE /api/courses/admin/courses/<course_id>/`
-- **Permission**: Admin role required
+- **Permission**: `IsAdminRole` required
 - **Status**: 204 No Content
 
 #### List All Courses (Admin)
 - **Endpoint**: `GET /api/courses/admin/courses/`
-- **Permission**: Admin role required
-- **Returns**: Paginated list of all courses
+- **Permission**: `IsAdminRole` required
+- **Response**: Paginated list of all courses
+- **Pagination**: 20 courses per page by default
+
+#### Get Course Details
+- **Endpoint**: `GET /api/courses/admin/courses/<course_id>/`
+- **Note**: Use detail views for individual course retrieval
 
 ## Real-Time Synchronization
 
 ### WebSocket Connection
 
-When an admin creates, updates, or deletes a course, all connected users are instantly notified via WebSocket.
+When any admin creates, updates, or deletes a course, all connected users (students, teachers, other admins) are instantly notified via WebSocket.
 
 #### Connecting to WebSocket
 ```javascript
 // Frontend example (JavaScript)
-const token = localStorage.getItem('access_token');
-const ws = new WebSocket(`ws://localhost:8000/ws/courses/?token=${token}`);
+const accessToken = localStorage.getItem('accessToken');
+const wsProtocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+const wsUrl = `${wsProtocol}://${window.location.host}/ws/courses/?token=${accessToken}`;
+const ws = new WebSocket(wsUrl);
+
+ws.onopen = () => {
+  console.log('Connected to course updates');
+};
 
 ws.onmessage = (event) => {
   const data = JSON.parse(event.data);
@@ -58,10 +96,13 @@ ws.onmessage = (event) => {
   
   if (data.event === 'course_created') {
     // Add course to local list
+    addCourseToUI(data.course);
   } else if (data.event === 'course_updated') {
     // Update course in local list
+    updateCourseInUI(data.course);
   } else if (data.event === 'course_deleted') {
     // Remove course from local list
+    removeCourseFromUI(data.course.id);
   }
 };
 
@@ -71,6 +112,7 @@ ws.onerror = (error) => {
 
 ws.onclose = () => {
   console.log('WebSocket connection closed');
+  // Implement reconnection logic if needed
 };
 ```
 
@@ -94,22 +136,58 @@ All WebSocket messages follow this format:
 
 ## How Synchronization Works
 
-1. **Admin creates/updates/deletes a course** via REST API
-2. **Django signal is triggered** (post_save or post_delete on Course model)
-3. **Signal handler broadcasts message** to all connected WebSocket clients
-4. **All connected users receive real-time notification** of the change
-5. **Frontend updates UI accordingly** (add, update, or remove course from list)
+1. **Admin Action** — Admin creates/updates/deletes a course via REST API (`POST /api/courses/admin/courses/`, etc.)
+2. **Signal Trigger** — Django post_save or post_delete signal is automatically triggered on Course model
+3. **Signal Handler** — Signal handler in `courses/signals.py` serializes the course and broadcasts the event
+4. **Channel Broadcast** — Event is sent to "courses_updates" channel group via Channels layer
+5. **WebSocket Notification** — All connected WebSocket clients in the group receive the update message
+6. **Frontend Update** — JavaScript processes the event and updates the local course list
+7. **UI Re-render** — React/vanilla JS re-renders the course list on the screen
+
+### Architecture Diagram
+
+```
+Admin REST API Request
+       ↓
+Django View (AdminCourseView)
+       ↓
+Course Model Save/Delete
+       ↓
+Django Signal (post_save/post_delete)
+       ↓
+Signal Handler (broadcasts to "courses_updates" group)
+       ↓
+Channels Layer (InMemory or Redis)
+       ↓
+WebSocket Group Send
+       ↓
+All Connected WebSocket Clients Receive Update
+       ↓
+Frontend JavaScript Handler
+       ↓
+Update Local State + Re-render UI
+```
 
 ## Technology Stack
 
-- **Django Channels**: Real-time WebSocket communication
-- **Daphne**: ASGI server for handling WebSocket connections
-- **In-Memory Channel Layer**: Used in development (channels-redis for production)
+- **Django Channels**: Real-time WebSocket communication protocol support
+- **Daphne**: ASGI application server (replaces WSGI for async support)
+- **ASGI Protocol**: Supports both HTTP and WebSocket protocols
+- **In-Memory Channel Layer**: Used in development (`InMemoryChannelLayer`)
+- **Redis Channel Layer**: Used in production (`RedisChannelLayer`)
+
+### Installed Dependencies
+```
+channels==4.0.0
+channels-redis==4.1.0
+daphne==4.0.0
+```
 
 ## Development Setup
 
 ### 1. Install Dependencies
 ```bash
+cd BACKEND/backend/django_lms
 pip install -r requirements.txt
 ```
 
@@ -118,32 +196,176 @@ pip install -r requirements.txt
 python manage.py runserver
 ```
 
-The server will now use Daphne ASGI server instead of the default Django development server.
+**Important**: The server automatically uses Daphne ASGI server when you have Channels installed. You'll see output like:
+```
+Starting ASGI/Daphne version 4.0.0 development server at http://127.0.0.1:8000/
+```
 
 ### 3. Test WebSocket Connection
 
-You can test the WebSocket using any WebSocket client:
-- **URL**: `ws://localhost:8000/ws/courses/?token=<your_jwt_token>`
-- **Authentication**: JWT token must be passed as a query parameter
+You can test the WebSocket using:
+
+**Browser DevTools Console:**
+```javascript
+const token = 'your_jwt_access_token';
+const ws = new WebSocket(`ws://localhost:8000/ws/courses/?token=${token}`);
+ws.onmessage = (e) => console.log(JSON.parse(e.data));
+ws.onopen = () => console.log('Connected');
+ws.onerror = (e) => console.error('Error', e);
+```
+
+**WebSocket CLI Tool:**
+```bash
+wscat -c "ws://localhost:8000/ws/courses/?token=<your_jwt_token>"
+```
+
+**Curl/HTTP Client:**
+Most modern browsers and HTTP clients (Postman, Insomnia) support WebSocket connections.
 
 ## Authentication
 
 WebSocket connections require JWT authentication:
-1. User logs in and receives access token
-2. Token is passed as `token` query parameter in WebSocket URL
-3. Consumer verifies token and authenticates the user
-4. If token is invalid or missing, connection is rejected
+
+1. **User Login** — User logs in via `/api/auth/login/` and receives `access` token
+2. **Token Storage** — Frontend stores token (typically in localStorage or sessionStorage)
+3. **WebSocket Connection** — Client connects with URL: `ws://localhost:8000/ws/courses/?token=<access_token>`
+4. **Token Verification** — Consumer middleware extracts token from URL query parameters
+5. **User Authentication** — Token is decoded and verified; user is authenticated
+6. **Connection Established** — If valid, WebSocket connection is accepted
+7. **Connection Rejected** — If invalid or missing, connection is closed
+
+**Token Lifecycle:**
+- Access tokens expire after 60 minutes
+- If token expires during WebSocket session, connection becomes invalid
+- Client should reconnect with a fresh token obtained via refresh endpoint
 
 ## Permissions
 
-- **Admins**: Can create, read, update, and delete all courses
-- **Teachers**: Can create, read courses they created; read all courses
-- **Students**: Can view all courses and enroll in them
+| Feature | Student | Teacher | Admin |
+|---------|---------|---------|-------|
+| View all courses | ✓ | ✓ | ✓ |
+| Create course | ✗ | ✓ (own) | ✓ (any) |
+| Update course | ✗ | ✓ (own) | ✓ (any) |
+| Delete course | ✗ | ✓ (own) | ✓ (any) |
+| Manage users | ✗ | ✗ | ✓ |
+| Receive WebSocket updates | ✓ | ✓ | ✓ |
+
+## Troubleshooting
+
+### WebSocket Connection Fails
+**Symptom**: WebSocket connections immediately close or fail to establish
+**Causes**:
+- Invalid or expired JWT token
+- Backend not running Daphne ASGI server
+- Firewall blocking WebSocket connections
+- Incorrect WebSocket URL
+
+**Solution**:
+1. Verify token is valid: `python manage.py shell` → `from rest_framework_simplejwt.tokens import AccessToken` → `AccessToken(token)`
+2. Check backend is running: `python manage.py runserver` outputs "Starting ASGI/Daphne"
+3. Check browser console for errors (F12 → Console tab)
+4. Verify WebSocket URL format: `ws://hostname:port/ws/courses/?token=<token>`
+
+### Course Updates Not Broadcasting
+**Symptom**: Course changes don't appear for other users
+**Causes**:
+- WebSocket connection not established
+- Backend using wrong channel layer configuration
+- Signal handlers not registered
+
+**Solution**:
+1. Verify WebSocket is connected: `ws.readyState === WebSocket.OPEN`
+2. Check channel layer: `python manage.py shell` → `from channels.layers import get_channel_layer` → `get_channel_layer()`
+3. Verify signals are registered: Check `courses/apps.py` has `ready()` method that imports signals
+
+### Multiple Users Not Seeing Updates
+**Symptom**: Only the user who made the change sees the update
+**Causes**:
+- Each user needs their own WebSocket connection
+- Users not logged in (no active session)
+- Connections closing unexpectedly
+
+**Solution**:
+1. Have all users log in to establish their own WebSocket connection
+2. Check that all connections are to "courses_updates" group
+3. Verify no connection errors in DevTools
+
+## Development vs Production
+
+**Development (In-Memory):**
+```python
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer"
+    }
+}
+```
+- Single-process only
+- No persistence
+- Perfect for local development
+- Configured in `settings/development.py`
+
+**Production (Redis):**
+```python
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
+```
+- Multi-process/multi-server support
+- Requires Redis running
+- Persists connections across servers
+- Configured in `settings/production.py` (needs to be created)
+
+## API Examples
+
+### Create Course
+```bash
+curl -X POST http://localhost:8000/api/courses/admin/courses/ \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Web Development",
+    "description": "Learn modern web development"
+  }'
+```
+
+### Update Course
+```bash
+curl -X PUT http://localhost:8000/api/courses/admin/courses/1/ \
+  -H "Authorization: Bearer <token>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Advanced Web Development",
+    "description": "Master advanced web techniques"
+  }'
+```
+
+### Delete Course
+```bash
+curl -X DELETE http://localhost:8000/api/courses/admin/courses/1/ \
+  -H "Authorization: Bearer <token>"
+```
+
+### List Courses
+```bash
+curl http://localhost:8000/api/courses/admin/courses/ \
+  -H "Authorization: Bearer <token>"
+```
 
 ## Future Enhancements
 
-- Add Redis channel layer for production multi-server deployment
-- Add presence tracking (who's viewing which courses)
-- Add course activity notifications
-- Implement course subscription/filtering by user role
-- Add rate limiting for course operations
+- ✏️ Add Redis channel layer configuration for production
+- 👁️ Add presence tracking (who's viewing which courses)
+- 📢 Add course activity notifications (enrollment, completion)
+- 🔔 Implement course subscription/filtering by user role
+- ⏱️ Add rate limiting for course operations
+- 🔄 Add automatic reconnection logic in frontend
+- 📱 Add mobile-optimized WebSocket client
+- 📊 Add analytics for course creation/deletion events
+- 🔐 Add additional security checks for WebSocket connections
+- 🗂️ Add course categories and filtering by category

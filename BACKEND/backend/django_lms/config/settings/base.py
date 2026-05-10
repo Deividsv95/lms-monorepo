@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "corsheaders",
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
+    "channels",
     # Local apps
     "users",
     "courses",
@@ -77,6 +78,9 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "config.wsgi.application"
+
+# ─── ASGI (Channels) ──────────────────────────────────────────────────────────
+ASGI_APPLICATION = "config.asgi.application"
 
 
 # ─── Auth ─────────────────────────────────────────────────────────────────────

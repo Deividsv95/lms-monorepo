@@ -719,21 +719,26 @@ async function handleCreateCourse() {
 
   try {
     const payload = getCreateCourseFormData();
+    console.log("Create course payload:", payload);
+    
     requireValue(payload.title, "Course title is required.");
     requireValue(payload.description, "Course description is required.");
 
+    console.log("Sending POST request to:", basePath);
     const data = await request(basePath, {
       method: "POST",
       body: courseBody(payload),
     });
 
+    console.log("Course created response:", data);
     setText(els.managementOutput, formatOutput(data));
     clearCreateCourseForm();
     if (currentCoursesPath()) {
       await loadCourses();
     }
-    setMessage("Course created.");
+    setMessage("Course created successfully!");
   } catch (error) {
+    console.error("Create course error:", error);
     setMessage(error.message || "Course action failed", true);
   }
 }
@@ -845,7 +850,14 @@ function bindDeleteAction(button, confirmMessage, onConfirm) {
 }
 
 function wireEvents() {
-  els.courseCreateBtn.addEventListener("click", handleCreateCourse);
+  // Verify elements exist before wiring
+  if (!els.courseCreateBtn) {
+    console.error("courseCreateBtn element not found!");
+  } else {
+    console.log("wiring courseCreateBtn click handler");
+    els.courseCreateBtn.addEventListener("click", handleCreateCourse);
+  }
+  
   bindDeleteAction(
     els.courseDeleteBtn,
     "Delete this course? This cannot be undone.",

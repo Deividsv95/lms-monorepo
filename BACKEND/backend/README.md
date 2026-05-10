@@ -68,6 +68,8 @@ Open **http://127.0.0.1:8080** in a browser.
 - `seed_demo_users` management command creates all three demo accounts
 - 24 automated tests cover auth, role enforcement, enrollment, and cross-role data sync
 - Frontend is zero-dependency plain HTML/JS — no build step required
+- **Real-time course updates via WebSocket** — when admins create/delete/update courses, all connected users are notified instantly
+- **Admin course management** — admins can create, update, and delete any course (not restricted to courses they created)
 
 ## Running Tests
 
@@ -76,3 +78,36 @@ cd BACKEND/backend/django_lms
 venv\Scripts\activate
 python manage.py test -v 2
 ```
+
+## Admin Course Management
+
+Admins have the ability to create, update, and delete courses. Unlike teachers who can only manage courses they created, admins have full control over all courses.
+
+### REST API Endpoints
+- `POST /api/courses/admin/courses/` — Create a new course
+- `GET /api/courses/admin/courses/` — List all courses
+- `PUT /api/courses/admin/courses/<id>/` — Update a course
+- `PATCH /api/courses/admin/courses/<id>/` — Partially update a course
+- `DELETE /api/courses/admin/courses/<id>/` — Delete a course
+
+For detailed documentation on admin course management and real-time synchronization, see [courses/ADMIN_COURSES_README.md](django_lms/courses/ADMIN_COURSES_README.md).
+
+## Real-Time Updates (WebSocket)
+
+When an admin creates, updates, or deletes a course, all connected users receive real-time notifications via WebSocket.
+
+**WebSocket URL**: `ws://localhost:8000/ws/courses/?token=<JWT_TOKEN>`
+
+Example JavaScript client:
+```javascript
+const token = localStorage.getItem('access_token');
+const ws = new WebSocket(`ws://localhost:8000/ws/courses/?token=${token}`);
+
+ws.onmessage = (event) => {
+  const data = JSON.parse(event.data);
+  // Handle course_created, course_updated, or course_deleted events
+  console.log(data.event, data.course);
+};
+```
+
+For more details, see [courses/ADMIN_COURSES_README.md](django_lms/courses/ADMIN_COURSES_README.md).

@@ -74,7 +74,10 @@
           </label>
           <label for="password">
             Password
-            <input id="password" name="password" type="password" placeholder="Enter password" autocomplete="current-password" minlength="6" required aria-label="Password for login" />
+            <div class="password-field-wrap">
+              <input id="password" name="password" type="password" placeholder="Enter password" autocomplete="new-password" minlength="6" required aria-label="Password for login" />
+              <button type="button" id="togglePassword" class="password-toggle" aria-label="Show password">Show</button>
+            </div>
           </label>
           <button class="btn primary" type="submit">Start Session</button>
         </form>

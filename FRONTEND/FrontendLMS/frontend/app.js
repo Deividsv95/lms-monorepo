@@ -665,7 +665,7 @@ function syncProfileCredentials() {
   }
 
   els.loginForm.elements.username.value = profile.username;
-  els.loginForm.elements.password.value = profile.password;
+  els.loginForm.elements.password.value = ""; // Prevent autofill of password
 }
 
 async function loadCourses() {
@@ -977,6 +977,17 @@ function wireEvents() {
   syncProfileCredentials();
   renderSession();
   renderCourses();
+  // Show/hide password toggle
+  const passwordInput = document.getElementById("password");
+  const togglePasswordBtn = document.getElementById("togglePassword");
+  if (passwordInput && togglePasswordBtn) {
+    togglePasswordBtn.addEventListener("click", function () {
+      const isPassword = passwordInput.type === "password";
+      passwordInput.type = isPassword ? "text" : "password";
+      togglePasswordBtn.setAttribute("aria-label", isPassword ? "Hide password" : "Show password");
+      togglePasswordBtn.textContent = isPassword ? "Hide" : "Show";
+    });
+  }
   await loadCourses();
   await loadUsers();
   await loadEnrollments();

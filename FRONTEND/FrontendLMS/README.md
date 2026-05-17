@@ -8,6 +8,18 @@ A role-based Learning Management System frontend where students enroll in course
 - Django LMS backend running at `http://127.0.0.1:8000` (with WebSocket support via Daphne)
 - Any modern browser with WebSocket support
 
+## Frontend Stack
+
+- Markup: HTML5
+- Styling: CSS3
+- Client logic: Vanilla JavaScript (ES6+)
+- Fonts: Google Fonts (Space Grotesk, DM Sans)
+- Auth integration: JWT tokens (stored in sessionStorage)
+- API communication: REST over HTTP
+- Real-time updates: WebSocket client connected to Django Channels backend
+- Local serving: Python http.server
+- Validation/tooling: npm script with Node.js syntax check (`node --check`)
+
 ## Quick Start
 
 1. Start the backend on port 8000 (see `BACKEND/backend/django_lms/README.md`).

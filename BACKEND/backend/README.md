@@ -29,6 +29,46 @@ lms-monorepo/
 - Python 3.10+
 - Any modern web browser (for the frontend)
 
+## Complete Stack
+
+### Architecture
+
+- Monorepo with separate backend and frontend folders
+- Role-based LMS domain model (student, teacher, admin)
+
+### Backend
+
+- Python 3.10+
+- Django 4.2
+- Django REST Framework 3.14
+- Simple JWT (djangorestframework-simplejwt) for authentication
+- django-cors-headers for cross-origin support
+- python-decouple for environment variable management
+
+### Real-Time
+
+- Django Channels 4.0 for WebSocket support
+- Daphne 4.0 as ASGI server
+- channels-redis 4.1 available for Redis channel layer deployments
+
+### Database
+
+- SQLite (development database in this repository)
+
+### Frontend
+
+- HTML5
+- CSS3
+- Vanilla JavaScript (ES6+)
+- Google Fonts (Space Grotesk, DM Sans)
+
+### Tooling and Scripts
+
+- npm scripts for frontend checks
+- Node.js used for JavaScript syntax validation
+- PowerShell scripts for endpoint and integration testing
+- Python built-in http.server for local static file serving
+
 ## Quick Start
 
 ```bash

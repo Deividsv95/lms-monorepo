@@ -13,6 +13,21 @@ A REST API that powers a learning management system — students enroll in cours
 
 ---
 
+## Backend Stack
+
+- Language: Python
+- Framework: Django 4.2
+- API Layer: Django REST Framework 3.14
+- Auth: JWT via djangorestframework-simplejwt
+- CORS: django-cors-headers
+- Config: python-decouple (.env)
+- Real-time: Django Channels 4.0 over ASGI
+- ASGI Server: Daphne 4.0
+- Channel Layer: channels-redis 4.1 (for Redis-backed deployments)
+- Database in this repository: SQLite
+
+---
+
 ## Quick Start
 
 ```bash

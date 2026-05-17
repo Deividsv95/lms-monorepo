@@ -4,7 +4,7 @@
   "description": "Plain HTML, CSS, and JavaScript frontend for a role-based LMS",
   "main": "frontend/app.js",
   "scripts": {
-    "start": "python -m http.server 8080",
+    "start": "python -m http.server 8080 --directory frontend",
     "test:syntax": "node --check frontend/app.js",
     "test": "npm run test:syntax"
   },

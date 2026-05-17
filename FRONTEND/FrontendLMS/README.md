@@ -14,7 +14,7 @@ A role-based Learning Management System frontend where students enroll in course
 - Styling: CSS3
 - Client logic: Vanilla JavaScript (ES6+)
 - Fonts: Google Fonts (Space Grotesk, DM Sans)
-- Auth integration: JWT tokens (stored in sessionStorage)
+- Auth integration: JWT tokens (stored in localStorage)
 - API communication: REST over HTTP
 - Real-time updates: WebSocket client connected to Django Channels backend
 - Local serving: Python http.server
@@ -36,6 +36,11 @@ A role-based Learning Management System frontend where students enroll in course
    | Student | `student_demo` | `Student@123` |
    | Teacher | `teacher_demo` | `Teacher@123` |
    | Admin | `admin_demo` | `Admin@123` |
+
+4. Login form behavior:
+   - Selecting a User Profile auto-fills the matching username
+   - Password is never auto-filled; enter it manually
+   - Use the `Show` / `Hide` control inside the password field to toggle visibility
 
 ## Key Features
 
@@ -99,3 +104,8 @@ The WebSocket connection is:
 - Confirm you're using the Django backend with Daphne ASGI (not the old WSGI server)
 - Check that WebSocket connections are allowed in your network
 - Verify JWT tokens are valid by checking login succeeds
+
+**Invalid credentials?**
+- Demo passwords are case-sensitive: `Student@123`, `Teacher@123`, `Admin@123`
+- Ensure the selected User Profile matches the username you are using
+- If the UI seems stale, hard refresh the page to load latest `app.js`

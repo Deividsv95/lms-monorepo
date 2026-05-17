@@ -123,6 +123,10 @@ Authorization: Bearer <access>
 | Teacher | `teacher_demo` | `Teacher@123` |
 | Admin | `admin_demo` | `Admin@123` |
 
+Notes:
+- Passwords are case-sensitive.
+- In the frontend, the selected profile auto-fills username, but password is entered manually.
+
 **4. What each role can do**
 
 | Role | Permissions |

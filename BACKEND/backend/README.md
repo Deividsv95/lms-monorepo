@@ -101,6 +101,10 @@ Open **http://127.0.0.1:8080** in a browser.
 | Teacher | `teacher_demo` | `Teacher@123` |
 | Admin | `admin_demo` | `Admin@123` |
 
+Notes:
+- Passwords are case-sensitive.
+- In the frontend login screen, username is profile-assisted but password must be entered manually.
+
 ## Key Features
 
 - JWT auth returns `access` and `refresh` tokens

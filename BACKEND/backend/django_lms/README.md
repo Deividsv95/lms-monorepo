@@ -72,3 +72,15 @@ python manage.py runserver
 ```
 
 The API will be available at http://127.0.0.1:8000.
+
+## Demo Users
+
+If you ran `python manage.py seed_demo_users`, the following test accounts are available:
+
+| Username | Password | Role |
+|----------|----------|------|
+| `admin_demo` | `Admin@123` | Admin |
+| `teacher_demo` | `Teacher@123` | Teacher |
+| `student_demo` | `Student@123` | Student |
+
+Use these credentials to test role-based features in the frontend.

@@ -116,6 +116,16 @@ cd FRONTEND/FrontendLMS
 npm run build
 ```
 
+## Demo Credentials
+
+If you ran `python manage.py seed_demo_users` during backend setup, test these accounts in the frontend:
+
+| Username | Password | Role |
+|----------|----------|------|
+| `admin_demo` | `Admin@123` | Admin (manage courses & users) |
+| `teacher_demo` | `Teacher@123` | Teacher (manage own courses) |
+| `student_demo` | `Student@123` | Student (browse & enroll) |
+
 ## Environment Variables
 
 ### Backend (required for local)

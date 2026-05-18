@@ -28,11 +28,13 @@ DATABASES = {
 }
 
 # ─── CORS ─────────────────────────────────────────────────────────────────────
-# List the exact origins of your deployed React frontend, e.g.:
-#   CORS_ALLOWED_ORIGINS=https://myapp.com,https://www.myapp.com
-CORS_ALLOWED_ORIGINS = csv_config("CORS_ALLOWED_ORIGINS")
-CORS_ALLOW_CREDENTIALS = config("CORS_ALLOW_CREDENTIALS", default=True, cast=bool)
-CSRF_TRUSTED_ORIGINS = csv_config("CSRF_TRUSTED_ORIGINS", default=",".join(CORS_ALLOWED_ORIGINS))
+CORS_ALLOWED_ORIGINS = [
+    "https://deividsv95.github.io",
+]
+CSRF_TRUSTED_ORIGINS = [
+    "https://deividsv95.github.io",
+]
+CORS_ALLOW_CREDENTIALS = True
 
 # ─── Security headers ─────────────────────────────────────────────────────────
 SECURE_BROWSER_XSS_FILTER = True
@@ -42,3 +44,4 @@ SECURE_SSL_REDIRECT = False
 APPEND_SLASH = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

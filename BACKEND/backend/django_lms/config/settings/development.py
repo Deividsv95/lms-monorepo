@@ -38,10 +38,3 @@ CSRF_TRUSTED_ORIGINS = csv_config(
     default=",".join(CORS_ALLOWED_ORIGINS),
 )
 
-# ─── Channels (WebSockets) ────────────────────────────────────────────────────
-# Use in-memory channel layer for development (no Redis needed)
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}

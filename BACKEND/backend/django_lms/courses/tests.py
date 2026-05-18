@@ -46,7 +46,7 @@ class CourseApiTests(APITestCase):
         response = self.client.get("/api/teacher/courses/")
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        results = response.data["results"]
+        results = response.data
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]["title"], "Admin Course")
 
@@ -65,13 +65,13 @@ class CourseApiTests(APITestCase):
         self._auth(self.student)
         student_list = self.client.get("/api/student/courses/")
         self.assertEqual(student_list.status_code, status.HTTP_200_OK)
-        self.assertTrue(any(c["id"] == course_id for c in student_list.data["results"]))
+        self.assertTrue(any(c["id"] == course_id for c in student_list.data))
 
         # Admin can also see the same course.
         self._auth(self.admin)
         admin_list = self.client.get("/api/admin/courses/")
         self.assertEqual(admin_list.status_code, status.HTTP_200_OK)
-        self.assertTrue(any(c["id"] == course_id for c in admin_list.data["results"]))
+        self.assertTrue(any(c["id"] == course_id for c in admin_list.data))
 
         # Teacher updates title; student and admin should see updated value.
         self._auth(self.teacher)
@@ -85,17 +85,13 @@ class CourseApiTests(APITestCase):
         self._auth(self.student)
         student_after_update = self.client.get("/api/student/courses/")
         self.assertEqual(student_after_update.status_code, status.HTTP_200_OK)
-        updated_for_student = next(
-            c for c in student_after_update.data["results"] if c["id"] == course_id
-        )
+        updated_for_student = next(c for c in student_after_update.data if c["id"] == course_id)
         self.assertEqual(updated_for_student["title"], "Sync Course Updated")
 
         self._auth(self.admin)
         admin_after_update = self.client.get("/api/admin/courses/")
         self.assertEqual(admin_after_update.status_code, status.HTTP_200_OK)
-        updated_for_admin = next(
-            c for c in admin_after_update.data["results"] if c["id"] == course_id
-        )
+        updated_for_admin = next(c for c in admin_after_update.data if c["id"] == course_id)
         self.assertEqual(updated_for_admin["title"], "Sync Course Updated")
 
         # Admin deletes the course; it should disappear for teacher and student.
@@ -105,12 +101,12 @@ class CourseApiTests(APITestCase):
         self._auth(self.teacher)
         teacher_after_delete = self.client.get("/api/teacher/courses/")
         self.assertEqual(teacher_after_delete.status_code, status.HTTP_200_OK)
-        self.assertFalse(any(c["id"] == course_id for c in teacher_after_delete.data["results"]))
+        self.assertFalse(any(c["id"] == course_id for c in teacher_after_delete.data))
 
         self._auth(self.student)
         student_after_delete = self.client.get("/api/student/courses/")
         self.assertEqual(student_after_delete.status_code, status.HTTP_200_OK)
-        self.assertFalse(any(c["id"] == course_id for c in student_after_delete.data["results"]))
+        self.assertFalse(any(c["id"] == course_id for c in student_after_delete.data))
 
     def test_student_can_enroll_and_view_enrolled_courses(self):
         course = Course.objects.create(
@@ -125,7 +121,7 @@ class CourseApiTests(APITestCase):
 
         courses_response = self.client.get("/api/student/enrolled-courses/")
         self.assertEqual(courses_response.status_code, status.HTTP_200_OK)
-        results = courses_response.data["results"]
+        results = courses_response.data
         self.assertEqual(len(results), 1)
         self.assertEqual(results[0]["title"], "Python")
 

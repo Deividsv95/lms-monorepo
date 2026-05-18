@@ -1,6 +1,6 @@
 from django.contrib.auth import authenticate, get_user_model
+from django.shortcuts import get_object_or_404
 from rest_framework import permissions, status
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.exceptions import TokenError
@@ -24,10 +24,6 @@ def _build_auth_response(user, status_code=status.HTTP_200_OK):
         },
         status=status_code,
     )
-
-
-def _get_user_by_id_or_none(user_id):
-    return User.objects.filter(id=user_id).first()
 
 
 def _invalid_credentials_response():
@@ -94,9 +90,7 @@ class AdminUserView(APIView):
 
     def get(self, request):
         users = User.objects.all().order_by("id")
-        paginator = PageNumberPagination()
-        page = paginator.paginate_queryset(users, request)
-        return paginator.get_paginated_response(UserSerializer(page, many=True).data)
+        return Response(UserSerializer(users, many=True).data)
 
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
@@ -109,20 +103,14 @@ class AdminUserDetailView(APIView):
     permission_classes = [IsAdminRole]
 
     def put(self, request, user_id):
-        user = _get_user_by_id_or_none(user_id)
-        if user is None:
-            return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
+        user = get_object_or_404(User, id=user_id)
         serializer = UserUpdateSerializer(user, data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(UserSerializer(user).data)
 
     def patch(self, request, user_id):
-        user = _get_user_by_id_or_none(user_id)
-        if user is None:
-            return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
+        user = get_object_or_404(User, id=user_id)
         serializer = UserUpdateSerializer(user, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -132,9 +120,6 @@ class AdminUserDetailView(APIView):
         if request.user.id == user_id:
             return Response({"detail": "Admin cannot delete self"}, status=status.HTTP_400_BAD_REQUEST)
 
-        user = _get_user_by_id_or_none(user_id)
-        if user is None:
-            return Response({"detail": "User not found"}, status=status.HTTP_404_NOT_FOUND)
-
+        user = get_object_or_404(User, id=user_id)
         user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)

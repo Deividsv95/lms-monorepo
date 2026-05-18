@@ -1,12 +1,26 @@
 {
   "name": "frontend-lms",
   "version": "1.0.0",
-  "description": "Plain HTML, CSS, and JavaScript frontend for a role-based LMS",
-  "main": "frontend/app.js",
+  "description": "React frontend for a role-based LMS",
+  "private": true,
+  "type": "module",
   "scripts": {
-    "start": "python -m http.server 8080 --directory frontend",
-    "test:syntax": "node --check frontend/app.js",
-    "test": "npm run test:syntax"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "npm run build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router-dom": "^6.30.1"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "gh-pages": "^6.3.0",
+    "vite": "^5.4.11"
   },
   "keywords": [
     "lms",

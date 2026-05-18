@@ -81,6 +81,11 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 # ─── ASGI (Channels) ──────────────────────────────────────────────────────────
 ASGI_APPLICATION = "config.asgi.application"
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels.layers.InMemoryChannelLayer",
+    }
+}
 
 
 # ─── Auth ─────────────────────────────────────────────────────────────────────
@@ -115,9 +120,6 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": (
         "rest_framework.permissions.IsAuthenticated",
     ),
-    # Return paginated lists so the React frontend handles large datasets easily.
-    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
-    "PAGE_SIZE": 20,
 }
 
 
@@ -137,7 +139,7 @@ SIMPLE_JWT = {
 # ─── CORS defaults ────────────────────────────────────────────────────────────
 # Keep CORS locked to explicit origins in each environment file.
 CORS_ALLOW_CREDENTIALS = config("CORS_ALLOW_CREDENTIALS", default=False, cast=bool)
-CORS_ALLOW_HEADERS = [*default_headers, "x-user-id"]
+CORS_ALLOW_HEADERS = [*default_headers]
 CORS_ALLOW_METHODS = [*default_methods]
 
 

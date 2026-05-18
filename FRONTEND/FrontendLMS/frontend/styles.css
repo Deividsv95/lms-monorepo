@@ -20,10 +20,7 @@
 
 body {
   margin: 0;
-  background: radial-gradient(circle at 12% 18%, rgba(251, 191, 36, 0.26) 0%, transparent 34%),
-    radial-gradient(circle at 88% 18%, rgba(15, 118, 110, 0.22) 0%, transparent 38%),
-    radial-gradient(circle at 72% 82%, rgba(59, 130, 246, 0.16) 0%, transparent 30%),
-    var(--bg);
+  background: var(--bg);
   color: var(--ink);
   font-family: var(--mono);
   line-height: 1.45;
@@ -79,46 +76,6 @@ body {
   left: -5rem;
 }
 
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  padding: clamp(0.85rem, 1.3vw, 1rem) clamp(0.85rem, 2.4vw, 1.25rem);
-  border-bottom: 1px solid var(--line);
-  background: rgba(244, 239, 231, 0.7);
-  backdrop-filter: blur(16px);
-  position: sticky;
-  top: 0;
-  z-index: 5;
-}
-
-.topbar h1 {
-  margin: 0;
-  font-family: var(--display);
-  letter-spacing: -0.04em;
-  font-size: clamp(1.45rem, 3vw, 2rem);
-}
-
-.topbar-actions {
-  display: flex;
-  gap: 0.75rem;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.eyebrow {
-  margin: 0 0 0.2rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  font-size: 0.76rem;
-  font-weight: 700;
-}
-
-.presence-pill,
-.role-chip,
 .insight-pill {
   display: inline-flex;
   align-items: center;
@@ -128,14 +85,6 @@ body {
   padding: 0.55rem 0.8rem;
   background: rgba(255, 255, 255, 0.72);
   color: var(--ink);
-}
-
-.presence-dot {
-  width: 0.55rem;
-  height: 0.55rem;
-  border-radius: 999px;
-  background: var(--accent);
-  box-shadow: 0 0 0 6px rgba(221, 107, 32, 0.14);
 }
 
 .layout {
@@ -153,8 +102,7 @@ body {
   background: var(--card);
   border-radius: clamp(18px, 3vw, 24px);
   padding: clamp(1rem, 2vw, 1.25rem);
-  box-shadow: 0 18px 48px rgba(16, 33, 43, 0.08);
-  backdrop-filter: blur(18px);
+  box-shadow: 0 8px 20px rgba(16, 33, 43, 0.08);
   min-width: 0;
 }
 
@@ -164,125 +112,6 @@ body {
   grid-column: 1 / -1;
 }
 
-.hero-card {
-  display: grid;
-  grid-template-columns: minmax(0, 1.2fr) minmax(18rem, 0.82fr);
-  gap: 1rem;
-  align-items: start;
-  overflow: hidden;
-  background: linear-gradient(145deg, rgba(255, 252, 247, 0.9), rgba(246, 240, 231, 0.7));
-}
-
-.hero-copy {
-  display: grid;
-  gap: 1rem;
-  align-content: start;
-}
-
-.hero-copy h2 {
-  font-size: clamp(2rem, 4vw, 3.4rem);
-  max-width: 15ch;
-}
-
-.hero-text {
-  max-width: 58ch;
-  font-size: 1rem;
-  color: var(--muted);
-}
-
-.hero-stats {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr));
-  gap: 0.8rem;
-}
-
-.stat-tile {
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  padding: 0.95rem;
-  background: rgba(255, 255, 255, 0.66);
-  display: grid;
-  gap: 0.35rem;
-}
-
-.stat-tile strong {
-  font-family: var(--display);
-  font-size: clamp(1.2rem, 2vw, 1.8rem);
-}
-
-.stat-label {
-  color: var(--muted);
-  font-size: 0.78rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-}
-
-.session-card-panel {
-  display: grid;
-  gap: 1rem;
-  align-content: start;
-  align-self: start;
-  width: 100%;
-  max-width: 30rem;
-  height: fit-content;
-  justify-self: end;
-  padding: clamp(1rem, 2.4vw, 1.4rem);
-  border-radius: 20px;
-  background: rgba(16, 33, 43, 0.96);
-  color: #f8fafc;
-}
-
-.session-card-panel .panel-head {
-  justify-content: center;
-}
-
-.session-card-panel label,
-.session-card-panel .message,
-.session-card-panel .eyebrow {
-  color: rgba(248, 250, 252, 0.78);
-}
-
-.session-card-panel input,
-.session-card-panel select,
-.session-card-panel textarea {
-  background: rgba(255, 255, 255, 0.96);
-}
-
-.password-field-wrap {
-  position: relative;
-  display: flex;
-  align-items: center;
-}
-
-.password-field-wrap input {
-  padding-right: 4.4rem;
-}
-
-.password-toggle {
-  position: absolute;
-  right: 0.6rem;
-  border: none;
-  background: transparent;
-  color: rgba(16, 33, 43, 0.72);
-  font-size: 0.84rem;
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  padding: 0;
-  min-height: auto;
-  cursor: pointer;
-}
-
-.password-toggle:hover {
-  color: rgba(16, 33, 43, 0.96);
-}
-
-.password-toggle:focus-visible {
-  outline: 2px solid rgba(20, 184, 166, 0.45);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-.panel-head,
 .section-head {
   display: flex;
   justify-content: space-between;
@@ -293,12 +122,6 @@ body {
 
 .section-head {
   margin-bottom: 0.8rem;
-}
-
-.role-chip {
-  background: rgba(255, 255, 255, 0.12);
-  color: #f8fafc;
-  border-color: rgba(255, 255, 255, 0.18);
 }
 
 .insight-card {
@@ -323,22 +146,6 @@ h4 {
   font-family: var(--display);
   margin-top: 0;
   line-height: 1.1;
-}
-
-.card-body {
-  animation: rise 220ms ease;
-}
-
-@keyframes rise {
-  from {
-    transform: translateY(6px);
-    opacity: 0;
-  }
-
-  to {
-    transform: translateY(0);
-    opacity: 1;
-  }
 }
 
 .stack {
@@ -427,16 +234,6 @@ button.btn {
 
 .no-margin {
   margin: 0;
-}
-
-.message {
-  margin: 0.75rem 0 0;
-  min-height: 1.2rem;
-  color: var(--muted);
-}
-
-.message.error {
-  color: #fca5a5;
 }
 
 .profile-summary,
@@ -581,14 +378,6 @@ pre {
   grid-column: span 2;
 }
 
-#courseManageHint {
-  margin-bottom: 0.65rem;
-}
-
-#managementOutput {
-  margin-top: 0.5rem;
-}
-
 .course-item {
   border: 1px solid var(--line);
   border-radius: 18px;
@@ -635,23 +424,11 @@ pre {
     grid-template-columns: minmax(0, 1.18fr) minmax(17rem, 0.92fr);
   }
 
-  .hero-card {
-    grid-template-columns: 1fr;
-  }
-
-  .session-card-panel {
-    justify-self: stretch;
-    max-width: none;
-  }
 }
 
 @media (max-width: 900px) {
   .layout {
     grid-template-columns: 1fr;
-  }
-
-  .hero-stats {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .management-split {
@@ -687,24 +464,9 @@ pre {
     margin-left: 0;
   }
 
-  .topbar-actions {
-    width: 100%;
-    align-items: stretch;
-  }
-
-  .presence-pill {
-    width: 100%;
-    justify-content: center;
-  }
 }
 
 @media (max-width: 640px) {
-  body {
-    background: radial-gradient(circle at 15% 15%, rgba(251, 191, 36, 0.24) 0%, transparent 32%),
-      radial-gradient(circle at 85% 80%, rgba(59, 130, 246, 0.16) 0%, transparent 38%),
-      var(--bg);
-  }
-
   .bg-orb {
     width: 16rem;
     height: 16rem;
@@ -721,28 +483,14 @@ pre {
     border-radius: 20px;
   }
 
-  .hero-copy h2 {
-    font-size: clamp(1.65rem, 7vw, 2.3rem);
-  }
-
-  .hero-stats {
-    grid-template-columns: 1fr;
-  }
-
   .small-actions,
-  .topbar-actions,
   .courses-head,
-  .section-head,
-  .panel-head {
+  .section-head {
     flex-direction: column;
     align-items: stretch;
   }
 
   button.btn {
-    width: 100%;
-  }
-
-  #logoutBtn {
     width: 100%;
   }
 
@@ -761,51 +509,5 @@ pre {
 
   .course-actions .btn {
     flex-basis: 100%;
-  }
-}
-
-@media (max-width: 420px) {
-  .topbar {
-    padding: 0.8rem 0.75rem;
-  }
-
-  .layout {
-    padding: 0 0.6rem 0.85rem;
-  }
-
-  .card {
-    padding: 0.8rem;
-  }
-
-  .eyebrow {
-    letter-spacing: 0.1em;
-  }
-
-  .management-block {
-    padding: 0.7rem;
-  }
-
-  pre,
-  textarea,
-  input,
-  select {
-    font-size: 0.95rem;
-  }
-}
-
-@media (max-width: 340px) {
-  .topbar {
-    padding: 0.7rem 0.55rem;
-  }
-
-  .layout {
-    padding: 0 0.5rem 0.75rem;
-  }
-
-  .card,
-  .management-block,
-  .management-panel,
-  .course-item {
-    border-radius: 14px;
   }
 }

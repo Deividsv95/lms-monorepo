@@ -11,7 +11,7 @@ This implementation provides **admin course management** with **real-time WebSoc
 ✅ **Cross-Role Visibility** — Students can see courses created by teachers AND admins  
 ✅ **Automatic UI Updates** — Course lists update instantly for all users without page reload  
 ✅ **JWT Authentication** — WebSocket connections secured with JWT tokens  
-✅ **Graceful Fallback** — In-memory channel layer for development, Redis for production  
+- **Graceful Fallback** — In-memory channel layer keeps the demo self-contained
 
 ## Features
 
@@ -157,7 +157,7 @@ Django Signal (post_save/post_delete)
        ↓
 Signal Handler (broadcasts to "courses_updates" group)
        ↓
-Channels Layer (InMemory or Redis)
+Channels Layer (InMemoryChannelLayer)
        ↓
 WebSocket Group Send
        ↓
@@ -173,13 +173,11 @@ Update Local State + Re-render UI
 - **Django Channels**: Real-time WebSocket communication protocol support
 - **Daphne**: ASGI application server (replaces WSGI for async support)
 - **ASGI Protocol**: Supports both HTTP and WebSocket protocols
-- **In-Memory Channel Layer**: Used in development (`InMemoryChannelLayer`)
-- **Redis Channel Layer**: Used in production (`RedisChannelLayer`)
+- **In-Memory Channel Layer**: Used by this repository (`InMemoryChannelLayer`)
 
 ### Installed Dependencies
 ```
 channels==4.0.0
-channels-redis==4.1.0
 daphne==4.0.0
 ```
 
@@ -196,7 +194,7 @@ pip install -r requirements.txt
 python manage.py runserver
 ```
 
-**Important**: The server automatically uses Daphne ASGI server when you have Channels installed. You'll see output like:
+**Important**: Run the backend with ASGI support enabled so WebSocket routes are available. Typical output includes:
 ```
 Starting ASGI/Daphne version 4.0.0 development server at http://127.0.0.1:8000/
 ```
@@ -256,13 +254,13 @@ WebSocket connections require JWT authentication:
 **Symptom**: WebSocket connections immediately close or fail to establish
 **Causes**:
 - Invalid or expired JWT token
-- Backend not running Daphne ASGI server
+- Backend not running with ASGI/WebSocket support
 - Firewall blocking WebSocket connections
 - Incorrect WebSocket URL
 
 **Solution**:
 1. Verify token is valid: `python manage.py shell` → `from rest_framework_simplejwt.tokens import AccessToken` → `AccessToken(token)`
-2. Check backend is running: `python manage.py runserver` outputs "Starting ASGI/Daphne"
+2. Check backend is running with ASGI output after `python manage.py runserver`
 3. Check browser console for errors (F12 → Console tab)
 4. Verify WebSocket URL format: `ws://hostname:port/ws/courses/?token=<token>`
 
@@ -290,9 +288,9 @@ WebSocket connections require JWT authentication:
 2. Check that all connections are to "courses_updates" group
 3. Verify no connection errors in DevTools
 
-## Development vs Production
+## Channel Layer Setup
 
-**Development (In-Memory):**
+Current configuration:
 ```python
 CHANNEL_LAYERS = {
     "default": {
@@ -302,24 +300,7 @@ CHANNEL_LAYERS = {
 ```
 - Single-process only
 - No persistence
-- Perfect for local development
-- Configured in `settings/development.py`
-
-**Production (Redis):**
-```python
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
-    },
-}
-```
-- Multi-process/multi-server support
-- Requires Redis running
-- Persists connections across servers
-- Configured in `settings/production.py` (needs to be created)
+- Configured in `config/settings/base.py`
 
 ## API Examples
 
@@ -359,7 +340,6 @@ curl http://localhost:8000/api/courses/admin/courses/ \
 
 ## Future Enhancements
 
-- ✏️ Add Redis channel layer configuration for production
 - 👁️ Add presence tracking (who's viewing which courses)
 - 📢 Add course activity notifications (enrollment, completion)
 - 🔔 Implement course subscription/filtering by user role

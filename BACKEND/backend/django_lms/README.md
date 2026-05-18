@@ -84,3 +84,16 @@ If you ran `python manage.py seed_demo_users`, the following test accounts are a
 | `student_demo` | `Student@123` | Student |
 
 Use these credentials to test role-based features in the frontend.
+
+## Render Deployment Note
+
+If your Render service does not provide shell access, you can seed demo users
+at startup by appending the script to your Start Command.
+
+Example Start Command:
+
+```bash
+python seed_users.py && daphne -b 0.0.0.0 -p $PORT config.asgi:application
+```
+
+The script is idempotent: it only creates missing demo users.

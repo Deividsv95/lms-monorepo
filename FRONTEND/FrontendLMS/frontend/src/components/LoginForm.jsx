@@ -89,7 +89,7 @@ function LoginForm({ onSubmit, authError, authMessage, isLoading = false }) {
       </div>
 
       {authMessage && (
-        <div className={`${styles.message} ${authError ? "error" : "success"}`}>
+        <div className={`${styles.message} ${authError ? styles.error : styles.success}`}>
           {authMessage}
         </div>
       )}

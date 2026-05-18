@@ -1,0 +1,158 @@
+.heroCard {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(18rem, 0.95fr);
+  gap: 1rem;
+}
+
+.heroCopy {
+  display: grid;
+  gap: 0.8rem;
+  align-content: start;
+}
+
+.title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+}
+
+.heroText {
+  margin: 0;
+  color: var(--muted);
+}
+
+.heroStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.statTile {
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 0.65rem 0.75rem;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.statLabel {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.statValue {
+  font-family: var(--display);
+  font-weight: 700;
+}
+
+.sessionCardPanel {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  padding: 0.95rem;
+  display: grid;
+  gap: 0.7rem;
+  align-content: start;
+}
+
+.panelHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.panelTitle {
+  margin: 0;
+}
+
+.roleChip {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--info-soft);
+  color: var(--brand);
+  padding: 0.25rem 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.sessionInfo {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.sessionInfo p {
+  margin: 0;
+  padding: 0.5rem 0;
+}
+
+.form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.formGroup {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.label {
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.input,
+.select {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.7rem 0.82rem;
+  background: rgba(255, 255, 255, 0.94);
+  min-height: 2.7rem;
+}
+
+.passwordWrapper {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.passwordWrapper .input {
+  flex: 1;
+}
+
+.toggleButton {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  cursor: pointer;
+}
+
+.message {
+  border-radius: 10px;
+  padding: 0.7rem 0.75rem;
+  font-size: 0.92rem;
+}
+
+.error {
+  background: rgba(180, 35, 24, 0.08);
+  color: var(--warn);
+}
+
+.success {
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--brand);
+}
+
+@media (max-width: 900px) {
+  .heroCard {
+    grid-template-columns: 1fr;
+  }
+
+  .heroStats {
+    grid-template-columns: 1fr;
+  }
+}

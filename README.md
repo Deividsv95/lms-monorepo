@@ -40,9 +40,8 @@ Default local backend base URL used by frontend is `http://127.0.0.1:8000`.
 
 ## Deployment Links
 
-Update these with your live URLs:
-- Frontend: `https://<your-frontend-url>`
-- Backend API: `https://<your-backend-url>`
+- Frontend: `https://deividsv95.github.io/`
+- Backend API: `https://lms-monorepo-zrob.onrender.com/api/v1/`
 
 ## Setup Instructions (Both Apps)
 

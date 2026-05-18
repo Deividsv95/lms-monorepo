@@ -48,15 +48,21 @@ If deploying to GitHub Pages (already configured in scripts):
 npm run deploy
 ```
 
+Live frontend deployment URL:
+- `https://deividsv95.github.io/`
+
 ## Configuring Backend API URL for Deployment
 
-The frontend automatically detects the backend API URL based on environment:
+Current configured deployment API URL:
+- `https://lms-monorepo-zrob.onrender.com/api/v1/`
+
+The frontend automatically uses:
 
 ### Auto-Detection (Default)
 - **Local development**: Uses `http://127.0.0.1:8000`
-- **Production**: Uses the same domain as the frontend
+- **Production**: Uses `https://lms-monorepo-zrob.onrender.com/api/v1/`
 
-If your frontend and backend are on the same domain, no configuration is needed.
+This is already configured in `frontend/index.html`.
 
 ### Custom Backend URL
 

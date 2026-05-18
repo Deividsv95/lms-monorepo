@@ -40,7 +40,8 @@ function LoginForm({ onSubmit, authError, authMessage, isLoading = false }) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className={styles.form}>
+    <>
+      <form onSubmit={handleSubmit} className={styles.form}>
       <div className={styles.formGroup}>
         <label htmlFor="user-profile-select" className={styles.label}>User Profile</label>
         <select
@@ -98,6 +99,39 @@ function LoginForm({ onSubmit, authError, authMessage, isLoading = false }) {
         {isLoading ? "Starting session..." : "Start Session"}
       </button>
     </form>
+    <div style={{ marginTop: '1.5rem', border: '1px solid var(--line)', borderRadius: 12, background: 'rgba(255,255,255,0.85)', padding: '1rem', fontSize: '0.98rem' }}>
+      <strong>Demo Login Credentials</strong>
+      <table style={{ width: '100%', marginTop: 8, borderCollapse: 'collapse', fontSize: '0.97rem' }}>
+        <thead>
+          <tr style={{ color: 'var(--muted)' }}>
+            <th style={{ textAlign: 'left', padding: 4 }}>Username</th>
+            <th style={{ textAlign: 'left', padding: 4 }}>Password</th>
+            <th style={{ textAlign: 'left', padding: 4 }}>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style={{ padding: 4 }}><code>admin_demo</code></td>
+            <td style={{ padding: 4 }}><code>Admin@123</code></td>
+            <td style={{ padding: 4 }}>Admin</td>
+          </tr>
+          <tr>
+            <td style={{ padding: 4 }}><code>teacher_demo</code></td>
+            <td style={{ padding: 4 }}><code>Teacher@123</code></td>
+            <td style={{ padding: 4 }}>Teacher</td>
+          </tr>
+          <tr>
+            <td style={{ padding: 4 }}><code>student_demo</code></td>
+            <td style={{ padding: 4 }}><code>Student@123</code></td>
+            <td style={{ padding: 4 }}>Student</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style={{ color: 'var(--muted)', fontSize: '0.93rem', marginTop: 6 }}>
+        Use these accounts to test all roles in the LMS.
+      </div>
+    </div>
+    </>
   );
 }
 

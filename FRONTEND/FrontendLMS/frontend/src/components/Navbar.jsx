@@ -1,7 +1,11 @@
 import { NavLink } from "react-router-dom";
 import styles from "./TopBar.module.css";
 
-function TopBar({ roleLabel, user, onLogout }) {
+/**
+ * Navbar: Navigation and user status display
+ * Handles: Route links, role label, logout action
+ */
+function Navbar({ roleLabel, user, onLogout }) {
   return (
     <header className={styles.topbar} role="banner">
       <div className={styles.topbarBrand}>
@@ -43,4 +47,4 @@ function TopBar({ roleLabel, user, onLogout }) {
   );
 }
 
-export default TopBar;
+export default Navbar;

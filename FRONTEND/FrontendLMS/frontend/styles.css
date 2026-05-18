@@ -225,6 +225,19 @@ button.btn {
   box-shadow: 0 8px 20px rgba(180, 35, 24, 0.14);
 }
 
+.btn.secondary {
+  border-color: var(--brand);
+  background: rgba(15, 118, 110, 0.1);
+  color: var(--brand);
+}
+
+.btn.secondary:hover {
+  background: var(--info-soft);
+  border-color: var(--brand-2);
+  color: var(--brand-2);
+  box-shadow: 0 8px 20px rgba(15, 118, 110, 0.12);
+}
+
 .small-actions {
   display: flex;
   gap: 0.6rem;
@@ -234,6 +247,110 @@ button.btn {
 
 .no-margin {
   margin: 0;
+}
+
+/* Form styles */
+.form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.formGroup {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.form .label {
+  font-weight: 600;
+}
+
+.form .input,
+.form .select {
+  padding: 0.65rem 0.75rem;
+}
+
+.passwordWrapper {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.passwordWrapper input {
+  flex: 1 1 auto;
+}
+
+.toggleButton {
+  padding: 0.65rem 0.75rem;
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 160ms ease;
+}
+
+.toggleButton:hover {
+  background: rgba(255, 255, 255, 0.72);
+}
+
+.form .message {
+  padding: 0.7rem 0.75rem;
+  border-radius: 10px;
+  font-size: 0.92rem;
+  background: rgba(15, 118, 110, 0.08);
+  color: var(--brand);
+}
+
+.form .message.error {
+  background: rgba(180, 35, 24, 0.08);
+  color: var(--warn);
+}
+
+/* List component styles */
+.list-section {
+  grid-column: 1 / -1;
+}
+
+.item-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.75rem;
+}
+
+.list-item {
+  padding: 0;
+}
+
+.empty-state {
+  color: var(--muted);
+  font-size: 0.95rem;
+  text-align: center;
+  padding: 1.5rem 0;
+  margin: 0;
+}
+
+/* Session info */
+.sessionInfo {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.sessionInfo p {
+  margin: 0;
+  padding: 0.5rem 0;
+  color: var(--ink);
+  font-size: 0.95rem;
+}
+
+.sessionInfo p strong {
+  color: var(--brand);
+  font-weight: 600;
+}
+
+.sessionInfo .btn {
+  margin-top: 0.5rem;
 }
 
 .profile-summary,
@@ -509,5 +626,57 @@ pre {
 
   .course-actions .btn {
     flex-basis: 100%;
+  }
+}
+
+/* Footer */
+.footer {
+  border-top: 1px solid var(--line);
+  background: rgba(255, 252, 247, 0.5);
+  padding: clamp(1.5rem, 3vw, 2rem) clamp(0.75rem, 2vw, 1.5rem);
+  margin-top: clamp(2rem, 4vw, 3rem);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+  display: grid;
+  gap: 1rem;
+}
+
+.footer-content p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.footer-link {
+  color: var(--brand);
+  text-decoration: none;
+  font-size: 0.92rem;
+  transition: color 160ms ease;
+}
+
+.footer-link:hover {
+  color: var(--brand-2);
+  text-decoration: underline;
+}
+
+@media (max-width: 640px) {
+  .footer {
+    padding: 1.25rem 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .footer-links {
+    gap: 1rem;
   }
 }

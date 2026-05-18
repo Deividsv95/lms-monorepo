@@ -2,12 +2,11 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 import { apiRequest, getApiBase } from "./lib/api";
 import { clearSessionUser, loadSessionUser, saveSessionUser, signIn } from "./lib/auth";
-import AuthHeroCard from "./components/AuthHeroCard";
+import Navbar from "./components/Navbar";
+import Dashboard from "./components/Dashboard";
 import CoursesSection from "./components/CoursesSection";
-import InsightCard from "./components/InsightCard";
 import ManagementSection from "./components/ManagementSection";
-import SessionStatusCard from "./components/SessionStatusCard";
-import TopBar from "./components/TopBar";
+import Footer from "./components/Footer";
 
 const ROLE_CONFIG = {
   admin: {
@@ -407,53 +406,44 @@ function App() {
       <div className="bg-orb bg-orb-a" />
       <div className="bg-orb bg-orb-b" />
 
-      <TopBar roleLabel={roleLabel} user={user} onLogout={resetSession} />
+      <Navbar roleLabel={roleLabel} user={user} onLogout={resetSession} />
 
       <main className="layout" id="main">
         <Routes>
           <Route
             path="/"
-            element={(
-              <>
-                <AuthHeroCard
-                  roleLabel={roleLabel}
-                  user={user}
-                  coursesCount={courses.length}
-                  enrollmentCount={enrollmentCount}
-                  onSessionStart={handleSessionStart}
-                  authError={authError}
-                  authMessage={authMessage}
-                />
-
-                <SessionStatusCard
-                  user={user}
-                  roleLabel={roleLabel}
-                  sessionCourses={sessionCourses}
-                  isStudent={isStudent}
-                  onRefresh={refreshSessionData}
-                  onLoadEnrollments={loadEnrollments}
-                />
-
-                <InsightCard roleSummary={roleSummary} enrollmentsOutput={enrollmentsOutput} />
-              </>
-            )}
+            element={
+              <Dashboard
+                user={user}
+                roleLabel={roleLabel}
+                coursesCount={courses.length}
+                enrollmentCount={enrollmentCount}
+                sessionCourses={sessionCourses}
+                onSessionStart={handleSessionStart}
+                onLogout={resetSession}
+                onRefresh={refreshSessionData}
+                authError={authError}
+                authMessage={authMessage}
+                isStudent={isStudent}
+              />
+            }
           />
 
           <Route
             path="/courses"
-            element={(
+            element={
               <CoursesSection
                 courses={courses}
                 isStudent={isStudent}
                 onLoadCourses={loadCourses}
                 onEnroll={handleEnroll}
               />
-            )}
+            }
           />
 
           <Route
             path="/management"
-            element={(
+            element={
               canManageCourses ? (
                 <ManagementSection
                   canManageCourses={canManageCourses}
@@ -473,12 +463,14 @@ function App() {
                   <p className="course-meta">Sign in as teacher or admin to access management tools.</p>
                 </section>
               )
-            )}
+            }
           />
 
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </main>
+
+      <Footer />
     </>
   );
 }

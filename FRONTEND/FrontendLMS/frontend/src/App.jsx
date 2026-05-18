@@ -11,20 +11,20 @@ import Footer from "./components/Footer";
 const ROLE_CONFIG = {
   admin: {
     label: "Admin",
-    listCoursesPath: "/api/admin/courses",
-    courseBasePath: "/api/admin/courses",
-    userBasePath: "/api/admin/users",
+    listCoursesPath: "/admin/courses",
+    courseBasePath: "/admin/courses",
+    userBasePath: "/admin/users",
   },
   teacher: {
     label: "Teacher",
-    listCoursesPath: "/api/teacher/courses",
-    courseBasePath: "/api/teacher/courses",
+    listCoursesPath: "/teacher/courses",
+    courseBasePath: "/teacher/courses",
   },
   student: {
     label: "Student",
-    listCoursesPath: "/api/student/courses",
-    enrolledCoursesPath: "/api/student/enrolled-courses",
-    enrollBasePath: "/api/student/enroll",
+    listCoursesPath: "/student/courses",
+    enrolledCoursesPath: "/student/enrolled-courses",
+    enrollBasePath: "/student/enroll",
   },
 };
 

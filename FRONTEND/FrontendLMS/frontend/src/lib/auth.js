@@ -47,7 +47,7 @@ export async function signIn(credentials) {
   }
 
   const data = await apiRequest(
-    "/api/auth/login",
+    "/auth/login",
     {
       method: "POST",
       body: { username, password },

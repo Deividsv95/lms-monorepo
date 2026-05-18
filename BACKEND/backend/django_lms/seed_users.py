@@ -19,8 +19,17 @@ User = get_user_model()
 
 
 def _ensure_user(username, email, password, role, is_superuser=False):
-    if User.objects.filter(username=username).exists():
-        print(f"{username} already exists. Skipping.")
+    existing_user = User.objects.filter(username=username).first()
+    if existing_user:
+        existing_user.email = email
+        existing_user.set_password(password)
+        if hasattr(existing_user, "role"):
+            existing_user.role = role
+        if is_superuser and not existing_user.is_superuser:
+            existing_user.is_superuser = True
+            existing_user.is_staff = True
+        existing_user.save()
+        print(f"{username} already exists. Password updated.")
         return
 
     if is_superuser:
@@ -51,21 +60,21 @@ def seed():
     _ensure_user(
         username="student_demo",
         email="student@test.com",
-        password="password123",
+        password="Student@123",
         role=role_student,
     )
 
     _ensure_user(
         username="teacher_demo",
         email="teacher@test.com",
-        password="password123",
+        password="Teacher@123",
         role=role_teacher,
     )
 
     _ensure_user(
         username="admin_demo",
         email="admin@test.com",
-        password="password123",
+        password="Admin@123",
         role=role_admin,
         is_superuser=True,
     )

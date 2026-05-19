@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useNavigate } from "react-router-dom";
 import { apiRequest, getApiBase } from "./lib/api";
 import { clearSessionUser, loadSessionUser, saveSessionUser, signIn } from "./lib/auth";
 import Navbar from "./components/Navbar";
@@ -69,6 +69,8 @@ function App() {
   const [managementOutput, setManagementOutput] = useState("No actions yet.");
   const [authMessage, setAuthMessage] = useState("");
   const [authError, setAuthError] = useState(false);
+  const [enrollingCourseId, setEnrollingCourseId] = useState(null);
+  const [justEnrolledIds, setJustEnrolledIds] = useState(new Set());
 
   const activeRole = user?.role || null;
   const isAdmin = activeRole === "admin";
@@ -227,10 +229,7 @@ function App() {
   }, [activeRole, courses, user?.id]);
 
   const enrollmentCount = useMemo(() => {
-    if (!enrollmentsOutput) {
-      return 0;
-    }
-
+    if (!enrollmentsOutput) return 0;
     try {
       const parsed = JSON.parse(enrollmentsOutput);
       return Array.isArray(parsed) ? parsed.length : 0;
@@ -238,6 +237,18 @@ function App() {
       return 0;
     }
   }, [enrollmentsOutput]);
+
+  const enrolledCourseIds = useMemo(() => {
+    if (!isStudent || !enrollmentsOutput) return new Set();
+    try {
+      const parsed = JSON.parse(enrollmentsOutput);
+      return new Set(Array.isArray(parsed) ? parsed.map((c) => c.id) : []);
+    } catch {
+      return new Set();
+    }
+  }, [isStudent, enrollmentsOutput]);
+
+  const navigate = useNavigate();
 
   function resetSession() {
     if (wsRef.current) {
@@ -252,6 +263,8 @@ function App() {
     setManagementOutput("No actions yet.");
     setAuthError(false);
     setAuthMessage("Logged out.");
+    setEnrollingCourseId(null);
+    setJustEnrolledIds(new Set());
   }
 
   async function handleSessionStart(credentials) {
@@ -476,18 +489,19 @@ function App() {
   }
 
   async function handleEnroll(courseId) {
-    if (!isStudent) {
-      return;
-    }
-
+    if (!isStudent) return;
+    setEnrollingCourseId(courseId);
     try {
       await apiRequest(`${ROLE_CONFIG.student.enrollBasePath}/${courseId}`, { method: "POST" }, { authToken: user?.accessToken });
       await Promise.all([loadCourses(), loadEnrollments()]);
+      setJustEnrolledIds((prev) => new Set([...prev, courseId]));
       setAuthError(false);
-      setAuthMessage("Enrollment request sent.");
+      setAuthMessage("Enrolled successfully.");
     } catch (error) {
       setAuthError(true);
       setAuthMessage(error.message || "Enrollment failed.");
+    } finally {
+      setEnrollingCourseId(null);
     }
   }
 
@@ -529,6 +543,10 @@ function App() {
                 isStudent={isStudent}
                 onLoadCourses={loadCourses}
                 onEnroll={handleEnroll}
+                enrolledCourseIds={enrolledCourseIds}
+                enrollingCourseId={enrollingCourseId}
+                justEnrolledIds={justEnrolledIds}
+                onViewEnrollments={() => navigate("/")}
               />
             }
           />

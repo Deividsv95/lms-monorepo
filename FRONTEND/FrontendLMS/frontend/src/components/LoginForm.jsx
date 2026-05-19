@@ -13,6 +13,7 @@ const USER_PROFILES = {
  */
 function LoginForm({ onSubmit, authError, authMessage, isLoading = false }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
+  const [showDemoCreds, setShowDemoCreds] = useState(false);
   const [form, setForm] = useState({
     userId: "3",
     username: USER_PROFILES[3].username,
@@ -38,6 +39,22 @@ function LoginForm({ onSubmit, authError, authMessage, isLoading = false }) {
     });
     setForm((prev) => ({ ...prev, password: "" }));
   }
+
+  const demoToggleStyle = {
+    background: "transparent",
+    border: "none",
+    color: "#00796b",
+    cursor: "pointer",
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "0.35rem",
+    fontSize: "0.85rem",
+    fontWeight: 600,
+    marginTop: "1rem",
+    padding: 0,
+    textDecoration: "underline",
+    textUnderlineOffset: "0.18em",
+  };
 
   return (
     <>
@@ -99,6 +116,60 @@ function LoginForm({ onSubmit, authError, authMessage, isLoading = false }) {
         {isLoading ? "Starting session..." : "Start Session"}
       </button>
     </form>
+
+    <button
+      type="button"
+      onClick={() => setShowDemoCreds(!showDemoCreds)}
+      style={demoToggleStyle}
+    >
+      <span>{showDemoCreds ? "Hide Demo Credentials" : "Show Demo Credentials"}</span>
+      <span aria-hidden="true">{showDemoCreds ? "▲" : "▼"}</span>
+    </button>
+
+    {showDemoCreds && (
+      <div
+        className="demo-credentials"
+        style={{
+          marginTop: "0.75rem",
+          border: "1px solid var(--line)",
+          borderRadius: 12,
+          background: "rgba(255,255,255,0.85)",
+          padding: "1rem",
+          fontSize: "0.98rem",
+        }}
+      >
+        <strong>Demo Login Credentials</strong>
+        <table style={{ width: "100%", marginTop: 8, borderCollapse: "collapse", fontSize: "0.97rem" }}>
+          <thead>
+            <tr style={{ color: "var(--muted)" }}>
+              <th style={{ textAlign: "left", padding: 4 }}>Username</th>
+              <th style={{ textAlign: "left", padding: 4 }}>Password</th>
+              <th style={{ textAlign: "left", padding: 4 }}>Role</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td style={{ padding: 4 }}><code>admin_demo</code></td>
+              <td style={{ padding: 4 }}><code>Admin@123</code></td>
+              <td style={{ padding: 4 }}>Admin</td>
+            </tr>
+            <tr>
+              <td style={{ padding: 4 }}><code>teacher_demo</code></td>
+              <td style={{ padding: 4 }}><code>Teacher@123</code></td>
+              <td style={{ padding: 4 }}>Teacher</td>
+            </tr>
+            <tr>
+              <td style={{ padding: 4 }}><code>student_demo</code></td>
+              <td style={{ padding: 4 }}><code>Student@123</code></td>
+              <td style={{ padding: 4 }}>Student</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style={{ color: "var(--muted)", fontSize: "0.93rem", marginTop: 6 }}>
+          Use these accounts to test all roles in the LMS.
+        </div>
+      </div>
+    )}
     </>
   );
 }

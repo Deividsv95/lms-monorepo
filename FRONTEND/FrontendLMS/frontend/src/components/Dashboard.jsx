@@ -10,6 +10,7 @@ function Dashboard({
   roleLabel,
   coursesCount,
   enrollmentCount,
+  enrolledCourses = [],
   sessionCourses,
   onSessionStart,
   onLogout,
@@ -64,6 +65,7 @@ function Dashboard({
       <section className={`${styles.heroCard} card session-card`}>
         <div className={styles.heroCopy}>
           <h2 className={styles.title}>Welcome, {user.username}!</h2>
+          {/* enrolledCourses section rendered below */}
           <p className={styles.heroText}>
             You are logged in as <strong>{roleLabel}</strong>
           </p>
@@ -107,6 +109,40 @@ function Dashboard({
           </div>
         </div>
       </section>
+
+      {isStudent && (
+        <section className="card courses-card">
+          <div className="courses-head">
+            <div>
+              <h2>Your Enrollments</h2>
+            </div>
+            <button type="button" onClick={onRefresh} className="btn line">
+              Refresh
+            </button>
+          </div>
+
+          <div className="courses-list">
+            {enrolledCourses.length === 0 ? (
+              <p className="course-meta">You haven&apos;t enrolled in any courses yet!</p>
+            ) : (
+              enrolledCourses.map((course) => (
+                <article key={course.id} className="course-item">
+                  <div className="course-item-head">
+                    <div>
+                      <div className="course-title">{course.title || "Untitled"}</div>
+                      <div className="course-meta">{course.description || ""}</div>
+                    </div>
+                    <div className="course-meta">Course #{course.id || "-"}</div>
+                  </div>
+                  <div className="course-meta">
+                    Teacher: {course.created_by_username || course.createdBy || "-"}
+                  </div>
+                </article>
+              ))
+            )}
+          </div>
+        </section>
+      )}
     </>
   );
 }

@@ -238,15 +238,20 @@ function App() {
     }
   }, [enrollmentsOutput]);
 
-  const enrolledCourseIds = useMemo(() => {
-    if (!isStudent || !enrollmentsOutput) return new Set();
+  const enrolledCourses = useMemo(() => {
+    if (!isStudent || !enrollmentsOutput) return [];
     try {
       const parsed = JSON.parse(enrollmentsOutput);
-      return new Set(Array.isArray(parsed) ? parsed.map((c) => c.id) : []);
+      return Array.isArray(parsed) ? parsed : [];
     } catch {
-      return new Set();
+      return [];
     }
   }, [isStudent, enrollmentsOutput]);
+
+  const enrolledCourseIds = useMemo(
+    () => new Set(enrolledCourses.map((c) => c.id)),
+    [enrolledCourses],
+  );
 
   const navigate = useNavigate();
 
@@ -524,6 +529,7 @@ function App() {
                 roleLabel={roleLabel}
                 coursesCount={courses.length}
                 enrollmentCount={enrollmentCount}
+                enrolledCourses={enrolledCourses}
                 sessionCourses={sessionCourses}
                 onSessionStart={handleSessionStart}
                 onLogout={resetSession}

@@ -1,42 +1,62 @@
+
 # LMS Django Backend
 
-Backend API for the LMS project, built with Django and Django REST Framework.
+This is the backend API for the LMS project, built with Django and Django REST Framework.
 
-## Service Path
+**For full project setup and stack overview, see the root [README.md](../../../README.md).**
 
-Run all backend commands from:
-
-```text
-BACKEND/backend/django_lms
-```
-
-## Requirements File
-
-The dependencies file exists at:
-
-```text
-BACKEND/backend/django_lms/requirements.txt
-```
-
-Quick check from repository root:
-
-```powershell
-Test-Path .\BACKEND\backend\django_lms\requirements.txt
-```
-
-Expected output: `True`
+---
 
 ## Requirements
 
 - Python 3.10+
 - pip
 
-## Setup (Sequential)
+## Setup
 
-1. Go to the backend project directory.
+Run all backend commands from:
+
+```
+BACKEND/backend/django_lms
+```
+
+Install dependencies:
 
 ```bash
-cd BACKEND/backend/django_lms
+python -m venv venv
+# Windows: venv\Scripts\Activate.ps1
+# macOS/Linux: source venv/bin/activate
+pip install -r requirements.txt
+```
+
+Create a `.env` file with at least:
+
+```
+SECRET_KEY=replace-this-with-a-real-key
+```
+
+Apply migrations and (optionally) seed demo users:
+
+```bash
+python manage.py migrate
+python manage.py seed_demo_users
+python manage.py runserver
+```
+
+API available at http://127.0.0.1:8000
+
+---
+
+## Environment Variables
+
+See this folder's `.env.example` or the root README for all required variables.
+
+---
+
+## Testing
+
+```bash
+python manage.py test -v 2
 ```
 
 2. Create a virtual environment.

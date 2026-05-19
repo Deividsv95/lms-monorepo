@@ -74,6 +74,24 @@ function ManagementSection({
     }
   }
 
+  function handleSelectCourseForUpdate(courseIdValue) {
+    const courseId = String(courseIdValue || "");
+    const selectedCourse = selectableTeacherCourses.find(
+      (course) => String(course.id) === courseId,
+    );
+
+    if (!selectedCourse) {
+      setUpdateCourseForm({ courseId: "", title: "", description: "" });
+      return;
+    }
+
+    setUpdateCourseForm({
+      courseId,
+      title: selectedCourse.title || "",
+      description: selectedCourse.description || "",
+    });
+  }
+
   async function handleCreateUserClick() {
     const success = await onCreateUser(createUserForm);
     if (success) {
@@ -166,7 +184,7 @@ function ManagementSection({
 
       <section className="management-block">
         <h3>Update Course</h3>
-        <p className="hint">Select a course and provide the fields you want to change.</p>
+        <p className="hint">Choose a course, edit title/description, then save changes.</p>
 
         <form className="stack" onSubmit={(event) => event.preventDefault()}>
           <div className="management-grid">
@@ -175,12 +193,7 @@ function ManagementSection({
               <select
                 name="updateCourseId"
                 value={updateCourseForm.courseId}
-                onChange={(event) =>
-                  setUpdateCourseForm((previous) => ({
-                    ...previous,
-                    courseId: event.target.value,
-                  }))
-                }
+                onChange={(event) => handleSelectCourseForUpdate(event.target.value)}
               >
                 <option value="">Select a course</option>
                 {selectableTeacherCourses.map((course) => (
@@ -191,7 +204,7 @@ function ManagementSection({
               </select>
             </label>
             <label>
-              New Title (optional)
+              Title
               <input
                 name="updateTitle"
                 type="text"
@@ -206,7 +219,7 @@ function ManagementSection({
               />
             </label>
             <label className="management-span-2">
-              New Description (optional)
+              Description
               <textarea
                 name="updateDescription"
                 rows="4"
@@ -222,8 +235,12 @@ function ManagementSection({
             </label>
           </div>
 
+          {!selectableTeacherCourses.length && (
+            <p className="hint">No courses available to edit yet. Create a course first.</p>
+          )}
+
           <div className="small-actions">
-            <button type="button" onClick={handleUpdateCourseClick} className="btn secondary">
+            <button type="button" onClick={handleUpdateCourseClick} className="btn primary">
               Update Course
             </button>
           </div>

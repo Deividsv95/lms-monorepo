@@ -499,10 +499,12 @@ function ManagementSection({
         </section>
       )}
 
-      <section className="management-block">
-        <h3>Response</h3>
-        <pre>{managementOutput}</pre>
-      </section>
+      {managementOutput && (
+        <section className="management-block">
+          <h3>Response</h3>
+          <pre>{managementOutput}</pre>
+        </section>
+      )}
     </section>
   );
 }

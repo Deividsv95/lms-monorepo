@@ -2,6 +2,8 @@
 
 Frontend application for the LMS project, built with React and Vite.
 
+This is the frontend-specific guide. For the fullstack project overview, see [../../README.md](../../README.md).
+
 ## Installation
 
 Prerequisites:
@@ -22,9 +24,9 @@ Start the development server:
 npm run dev
 ```
 
-Then open the URL shown in terminal (typically `http://localhost:5173`).
+Open the URL shown in terminal (typically `http://localhost:5173`).
 
-Note: this frontend expects the LMS backend API to be reachable (default: `http://127.0.0.1:8000`) for login, course data, and real-time updates.
+For full application behavior (login, course data, real-time updates), make sure the backend API is running.
 
 ## Build Instructions (Deployment)
 
@@ -41,46 +43,3 @@ Optional local verification of the production build:
 ```bash
 npm run preview
 ```
-
-If deploying to GitHub Pages (already configured in scripts):
-
-```bash
-npm run deploy
-```
-
-Live frontend deployment URL:
-- `https://deividsv95.github.io/`
-
-## Configuring Backend API URL for Deployment
-
-Current configured deployment API URL:
-- `https://lms-monorepo-zrob.onrender.com/api/v1/`
-
-The frontend automatically uses:
-
-### Auto-Detection (Default)
-- **Local development**: Uses `http://127.0.0.1:8000`
-- **Production**: Uses `https://lms-monorepo-zrob.onrender.com/api/v1/`
-
-This is already configured in `frontend/index.html`.
-
-### Custom Backend URL
-
-If your backend is on a different domain, add this to `frontend/index.html` **before** the main script tag:
-
-```html
-<script>
-  window.API_BASE = "https://your-backend-url.com";
-</script>
-<script type="module" src="/src/main.jsx"></script>
-```
-
-**Example**: Frontend at `https://myapp.com`, backend at `https://api.myapp.com`:
-
-```html
-<script>
-  window.API_BASE = "https://api.myapp.com";
-</script>
-```
-
-The frontend will then make all API requests to your specified backend URL.

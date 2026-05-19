@@ -1,26 +1,43 @@
 # Backend Overview
 
-This folder contains the Django backend service for the LMS project.
+This directory contains the backend portion of the LMS project.
 
-## Structure
+## Backend Service
 
-```
-BACKEND/backend/
-└── django_lms/
-    ├── config/
-    ├── users/
-    ├── courses/
-    ├── requirements.txt
-    └── manage.py
+Primary backend application path:
+
+```text
+BACKEND/backend/django_lms
 ```
 
-## Setup and Run
+## Source of Truth
 
-Use the Django service README as the single source of truth for backend setup, dependencies, database initialization, and server startup:
+Use the Django service README for all backend details:
+
+- setup and run steps
+- virtual environment workflow
+- dependencies and requirements file
+- database setup and migrations
+- server startup
+- demo users and deployment notes
 
 - [django_lms/README.md](django_lms/README.md)
 
+## Structure
+
+```text
+BACKEND/backend/
+└── django_lms/
+	├── config/
+	├── users/
+	├── courses/
+	├── requirements.txt
+	├── manage.py
+	└── README.md
+```
+
 ## Notes
 
-- Backend dependencies are defined in `django_lms/requirements.txt`.
-- Run backend commands from the `django_lms` directory.
+- Keep this file short as a backend index page.
+- Avoid duplicating setup content here.
+- Update [django_lms/README.md](django_lms/README.md) when backend setup changes.

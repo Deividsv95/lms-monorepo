@@ -191,6 +191,10 @@ function App() {
 
             return previous;
           });
+
+          if (isStudent && (data.event === "course_updated" || data.event === "course_deleted")) {
+            loadEnrollments();
+          }
         } catch {
           // Ignore malformed messages.
         }
@@ -207,7 +211,7 @@ function App() {
         wsRef.current = null;
       }
     };
-  }, [user]);
+  }, [isStudent, loadEnrollments, user]);
 
   const sessionCourses = useMemo(
     () => courses.map((course) => course.title || "Untitled"),
@@ -323,6 +327,48 @@ function App() {
     }
   }
 
+  async function handleUpdateCourse(payload) {
+    if (!activeRoleConfig?.courseBasePath) {
+      setAuthError(true);
+      setAuthMessage("Current role cannot manage courses.");
+      return false;
+    }
+
+    try {
+      const courseId = String(payload?.courseId || "").trim();
+      const title = String(payload?.title || "").trim();
+      const description = String(payload?.description || "").trim();
+
+      requireValue(courseId, "Course ID is required for update.");
+      if (!title && !description) {
+        throw new Error("Provide a title or description to update.");
+      }
+
+      const body = {};
+      if (title) {
+        body.title = title;
+      }
+      if (description) {
+        body.description = description;
+      }
+
+      const data = await apiRequest(`${activeRoleConfig.courseBasePath}/${courseId}`, {
+        method: "PATCH",
+        body,
+      }, { authToken: user?.accessToken });
+
+      setManagementOutput(formatOutput(data));
+      await loadCourses();
+      setAuthError(false);
+      setAuthMessage("Course updated.");
+      return true;
+    } catch (error) {
+      setAuthError(true);
+      setAuthMessage(error.message || "Course action failed.");
+      return false;
+    }
+  }
+
   async function handleCreateUser(payload) {
     if (!isAdmin) {
       setAuthError(true);
@@ -375,6 +421,52 @@ function App() {
       await loadUsers();
       setAuthError(false);
       setAuthMessage("User deleted.");
+      return true;
+    } catch (error) {
+      setAuthError(true);
+      setAuthMessage(error.message || "User action failed.");
+      return false;
+    }
+  }
+
+  async function handleUpdateUser(payload) {
+    if (!isAdmin) {
+      setAuthError(true);
+      setAuthMessage("Only admin can manage users.");
+      return false;
+    }
+
+    try {
+      const userId = String(payload?.userId || "").trim();
+      const username = String(payload?.username || "").trim();
+      const email = String(payload?.email || "").trim();
+      const role = String(payload?.role || "").trim();
+
+      requireValue(userId, "User ID is required for update.");
+      if (!username && !email && !role) {
+        throw new Error("Provide username, email, or role to update.");
+      }
+
+      const body = {};
+      if (username) {
+        body.username = username;
+      }
+      if (email) {
+        body.email = email;
+      }
+      if (role) {
+        body.role = role;
+      }
+
+      const data = await apiRequest(`${ROLE_CONFIG.admin.userBasePath}/${userId}`, {
+        method: "PATCH",
+        body,
+      }, { authToken: user?.accessToken });
+
+      setManagementOutput(formatOutput(data));
+      await loadUsers();
+      setAuthError(false);
+      setAuthMessage("User updated.");
       return true;
     } catch (error) {
       setAuthError(true);
@@ -453,8 +545,10 @@ function App() {
                   users={users}
                   managementOutput={managementOutput}
                   onCreateCourse={handleCreateCourse}
+                  onUpdateCourse={handleUpdateCourse}
                   onDeleteCourse={handleDeleteCourse}
                   onCreateUser={handleCreateUser}
+                  onUpdateUser={handleUpdateUser}
                   onDeleteUserById={handleDeleteUserById}
                 />
               ) : (

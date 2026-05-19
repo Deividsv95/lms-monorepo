@@ -49,7 +49,7 @@ class TeacherCourseView(APIView):
     permission_classes = [IsTeacher]
 
     def get(self, request):
-        courses = Course.objects.all().order_by("id")
+        courses = Course.objects.filter(created_by=request.user).order_by("id")
         return Response(CourseSerializer(courses, many=True).data)
 
     def post(self, request):

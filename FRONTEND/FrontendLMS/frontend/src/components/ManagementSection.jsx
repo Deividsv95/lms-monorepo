@@ -8,8 +8,10 @@ function ManagementSection({
   users,
   managementOutput,
   onCreateCourse,
+  onUpdateCourse,
   onDeleteCourse,
   onCreateUser,
+  onUpdateUser,
   onDeleteUserById,
 }) {
   const [createCourseForm, setCreateCourseForm] = useState({
@@ -20,12 +22,23 @@ function ManagementSection({
     courseId: "",
     courseIdManual: "",
   });
+  const [updateCourseForm, setUpdateCourseForm] = useState({
+    courseId: "",
+    title: "",
+    description: "",
+  });
   const [createUserForm, setCreateUserForm] = useState({
     name: "",
     role: "student",
   });
   const [userManageForm, setUserManageForm] = useState({
     userId: "",
+  });
+  const [updateUserForm, setUpdateUserForm] = useState({
+    userId: "",
+    username: "",
+    email: "",
+    role: "",
   });
 
   if (!canManageCourses) {
@@ -51,6 +64,13 @@ function ManagementSection({
     const success = await onDeleteCourse(courseId);
     if (success) {
       setCourseManageForm({ courseId: "", courseIdManual: "" });
+    }
+  }
+
+  async function handleUpdateCourseClick() {
+    const success = await onUpdateCourse(updateCourseForm);
+    if (success) {
+      setUpdateCourseForm({ courseId: "", title: "", description: "" });
     }
   }
 
@@ -81,6 +101,13 @@ function ManagementSection({
     }
   }
 
+  async function handleUpdateUserClick() {
+    const success = await onUpdateUser(updateUserForm);
+    if (success) {
+      setUpdateUserForm({ userId: "", username: "", email: "", role: "" });
+    }
+  }
+
   return (
     <section className="card management-card">
       <div className="courses-head">
@@ -90,8 +117,8 @@ function ManagementSection({
       </div>
       <p className="hint">
         {activeRole === "teacher"
-          ? "Create and delete courses."
-          : "Create and delete courses and users."}
+          ? "Create, update, and delete your courses."
+          : "Create, update, and delete courses and users."}
       </p>
 
       <section className="management-block">
@@ -132,6 +159,72 @@ function ManagementSection({
           <div className="small-actions">
             <button type="button" onClick={handleCreateCourseClick} className="btn primary">
               Create Course
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section className="management-block">
+        <h3>Update Course</h3>
+        <p className="hint">Select a course and provide the fields you want to change.</p>
+
+        <form className="stack" onSubmit={(event) => event.preventDefault()}>
+          <div className="management-grid">
+            <label>
+              Course
+              <select
+                name="updateCourseId"
+                value={updateCourseForm.courseId}
+                onChange={(event) =>
+                  setUpdateCourseForm((previous) => ({
+                    ...previous,
+                    courseId: event.target.value,
+                  }))
+                }
+              >
+                <option value="">Select a course</option>
+                {selectableTeacherCourses.map((course) => (
+                  <option key={course.id} value={course.id}>
+                    {course.title || `Course ${course.id}`}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label>
+              New Title (optional)
+              <input
+                name="updateTitle"
+                type="text"
+                placeholder="Updated course title"
+                value={updateCourseForm.title}
+                onChange={(event) =>
+                  setUpdateCourseForm((previous) => ({
+                    ...previous,
+                    title: event.target.value,
+                  }))
+                }
+              />
+            </label>
+            <label className="management-span-2">
+              New Description (optional)
+              <textarea
+                name="updateDescription"
+                rows="4"
+                placeholder="Updated course description"
+                value={updateCourseForm.description}
+                onChange={(event) =>
+                  setUpdateCourseForm((previous) => ({
+                    ...previous,
+                    description: event.target.value,
+                  }))
+                }
+              />
+            </label>
+          </div>
+
+          <div className="small-actions">
+            <button type="button" onClick={handleUpdateCourseClick} className="btn secondary">
+              Update Course
             </button>
           </div>
         </form>
@@ -299,6 +392,88 @@ function ManagementSection({
                 <div className="small-actions">
                   <button type="button" onClick={handleDeleteUserFromFormClick} className="btn danger">
                     Delete
+                  </button>
+                </div>
+              </form>
+            </section>
+
+            <section className="management-panel">
+              <h4>Update User</h4>
+              <p className="hint">Select a user and provide fields to update.</p>
+              <form className="stack compact-stack" onSubmit={(event) => event.preventDefault()}>
+                <div className="management-grid single-column-grid">
+                  <label>
+                    User
+                    <select
+                      name="updateUserId"
+                      value={updateUserForm.userId}
+                      onChange={(event) =>
+                        setUpdateUserForm((previous) => ({
+                          ...previous,
+                          userId: event.target.value,
+                        }))
+                      }
+                    >
+                      <option value="">Select a user</option>
+                      {users.map((item) => (
+                        <option key={item.id} value={item.id}>
+                          {item.username || `User ${item.id}`}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    Username (optional)
+                    <input
+                      name="updateUsername"
+                      type="text"
+                      placeholder="Updated username"
+                      value={updateUserForm.username}
+                      onChange={(event) =>
+                        setUpdateUserForm((previous) => ({
+                          ...previous,
+                          username: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    Email (optional)
+                    <input
+                      name="updateEmail"
+                      type="email"
+                      placeholder="updated@email.com"
+                      value={updateUserForm.email}
+                      onChange={(event) =>
+                        setUpdateUserForm((previous) => ({
+                          ...previous,
+                          email: event.target.value,
+                        }))
+                      }
+                    />
+                  </label>
+                  <label>
+                    Role (optional)
+                    <select
+                      name="updateRole"
+                      value={updateUserForm.role}
+                      onChange={(event) =>
+                        setUpdateUserForm((previous) => ({
+                          ...previous,
+                          role: event.target.value,
+                        }))
+                      }
+                    >
+                      <option value="">Keep current role</option>
+                      <option value="student">Student</option>
+                      <option value="teacher">Teacher</option>
+                      <option value="admin">Admin</option>
+                    </select>
+                  </label>
+                </div>
+                <div className="small-actions">
+                  <button type="button" onClick={handleUpdateUserClick} className="btn secondary">
+                    Update User
                   </button>
                 </div>
               </form>

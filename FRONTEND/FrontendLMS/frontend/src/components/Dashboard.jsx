@@ -1,10 +1,6 @@
 import LoginForm from "./LoginForm";
 import styles from "./AuthHeroCard.module.css";
 
-/**
- * Dashboard: Main dashboard view
- * Handles: Hero section, statistics, login form, session info
- */
 function Dashboard({
   user,
   roleLabel,
@@ -65,7 +61,6 @@ function Dashboard({
       <section className={`${styles.heroCard} card session-card`}>
         <div className={styles.heroCopy}>
           <h2 className={styles.title}>Welcome, {user.username}!</h2>
-          {/* enrolledCourses section rendered below */}
           <p className={styles.heroText}>
             You are logged in as <strong>{roleLabel}</strong>
           </p>

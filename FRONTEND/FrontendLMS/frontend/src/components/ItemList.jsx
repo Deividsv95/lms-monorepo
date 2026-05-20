@@ -1,8 +1,3 @@
-/**
- * ItemList: Reusable list component
- * Handles: Displaying lists of items (courses, users, etc.)
- * Props: items, renderItem, onAction, title, emptyMessage
- */
 function ItemList({
   items = [],
   renderItem,

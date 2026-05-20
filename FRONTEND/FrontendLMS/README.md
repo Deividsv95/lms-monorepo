@@ -1,51 +1,49 @@
 
 # FrontendLMS
 
-Frontend application for the LMS project, built with React and Vite.
+React and Vite frontend for the LMS project.
 
-**For fullstack setup and project overview, see the root [README.md](../../README.md).**
+For the full project overview, see [README.md](../../README.md).
 
----
+## Requirements
 
-## Prerequisites
 - Node.js 18+
 - npm
 
 ## Setup
 
-Install dependencies:
 ```bash
 npm install
-```
-
-Start the development server:
-```bash
 npm run dev
 ```
 
-App runs at http://localhost:5173
+Frontend URL:
 
----
+```text
+http://localhost:5173
+```
 
-## Build (Production)
+## Build
 
-Create a production build:
 ```bash
 npm run build
 ```
 
-Build output is generated in the `dist/` folder.
-
----
-
 ## Testing
 
-Run API/feature tests:
+Frontend smoke test:
+
+```bash
+npm run test
+```
+
+Optional API check script:
+
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\run_tests.ps1 -BaseUrl http://localhost:8000
 ```
 
-Optional local verification of the production build:
+Preview the production build:
 
 ```bash
 npm run preview

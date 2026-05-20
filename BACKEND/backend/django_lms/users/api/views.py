@@ -61,8 +61,6 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
-    """Blacklist the submitted refresh token so it cannot be reused after logout."""
-
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):

@@ -198,13 +198,13 @@ function App() {
             loadEnrollments();
           }
         } catch {
-          // Ignore malformed messages.
+          // bad ws payload, skip it
         }
       };
 
       wsRef.current = ws;
     } catch {
-      // Ignore websocket setup issues.
+      // ws is optional here, so just keep going
     }
 
     return () => {

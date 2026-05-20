@@ -1,7 +1,3 @@
-/**
- * Footer: Application footer
- * Handles: Footer links, copyright, info
- */
 function Footer() {
   const currentYear = new Date().getFullYear();
 

@@ -25,7 +25,7 @@ class CourseApiTests(APITestCase):
         refresh = RefreshToken.for_user(user)
         self.client.credentials(HTTP_AUTHORIZATION=f"Bearer {str(refresh.access_token)}")
 
-    # ── Happy-path tests ──────────────────────────────────────────────────────
+    # core flow checks
 
     def test_teacher_can_create_course(self):
         self._auth(self.teacher)
@@ -51,7 +51,7 @@ class CourseApiTests(APITestCase):
         self.assertEqual(results[0]["title"], "Admin Course")
 
     def test_course_data_syncs_across_teacher_student_admin(self):
-        # Teacher creates a course.
+        # Teacher creates a course
         self._auth(self.teacher)
         create_response = self.client.post(
             "/api/teacher/courses/",
@@ -61,19 +61,19 @@ class CourseApiTests(APITestCase):
         self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
         course_id = create_response.data["id"]
 
-        # Student can see the newly created course.
+        # Student should see it too
         self._auth(self.student)
         student_list = self.client.get("/api/student/courses/")
         self.assertEqual(student_list.status_code, status.HTTP_200_OK)
         self.assertTrue(any(c["id"] == course_id for c in student_list.data))
 
-        # Admin can also see the same course.
+        # Admin should also see it
         self._auth(self.admin)
         admin_list = self.client.get("/api/admin/courses/")
         self.assertEqual(admin_list.status_code, status.HTTP_200_OK)
         self.assertTrue(any(c["id"] == course_id for c in admin_list.data))
 
-        # Teacher updates title; student and admin should see updated value.
+        # Update should show up for both roles
         self._auth(self.teacher)
         update_response = self.client.patch(
             f"/api/teacher/courses/{course_id}/",
@@ -94,7 +94,7 @@ class CourseApiTests(APITestCase):
         updated_for_admin = next(c for c in admin_after_update.data if c["id"] == course_id)
         self.assertEqual(updated_for_admin["title"], "Sync Course Updated")
 
-        # Admin deletes the course; it should disappear for teacher and student.
+        # Delete should remove it for everyone
         delete_response = self.client.delete(f"/api/admin/courses/{course_id}/")
         self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -168,7 +168,7 @@ class CourseApiTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Course.objects.count(), 0)
 
-    # ── Unauthenticated access (401) ──────────────────────────────────────────
+    # auth checks
 
     def test_unauthenticated_cannot_browse_courses(self):
         response = self.client.get("/api/student/courses/")
@@ -180,7 +180,7 @@ class CourseApiTests(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
 
-    # ── Cross-role access (403) ───────────────────────────────────────────────
+    # role guard checks
 
     def test_student_cannot_create_course(self):
         self._auth(self.student)
@@ -210,7 +210,7 @@ class CourseApiTests(APITestCase):
         response = self.client.delete(f"/api/teacher/courses/{course.id}/")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    # ── Duplicate enrollment ──────────────────────────────────────────────────
+    # re-enrollment handling
 
     def test_student_cannot_enroll_twice(self):
         course = Course.objects.create(
@@ -226,7 +226,7 @@ class CourseApiTests(APITestCase):
         response = self.client.post("/api/student/enroll/99999/", format="json")
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
 
-    # ── Invalid payloads ─────────────────────────────────────────────────────
+    # bad payload checks
 
     def test_teacher_create_course_missing_title_returns_400(self):
         self._auth(self.teacher)

@@ -1,11 +1,9 @@
 
 # LMS Django Backend
 
-This is the backend API for the LMS project, built with Django and Django REST Framework.
+Backend API for the LMS project.
 
-**For full project setup and stack overview, see the root [README.md](../../../README.md).**
-
----
+For the full project overview, see [README.md](../../../README.md).
 
 ## Requirements
 
@@ -14,13 +12,13 @@ This is the backend API for the LMS project, built with Django and Django REST F
 
 ## Setup
 
-Run all backend commands from:
+Run everything from:
 
-```
+```text
 BACKEND/backend/django_lms
 ```
 
-Install dependencies:
+Install and start the project:
 
 ```bash
 python -m venv venv
@@ -29,83 +27,17 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-Create a `.env` file with at least:
+Create a `.env` file:
 
-```
+```text
 SECRET_KEY=replace-this-with-a-real-key
 ```
 
-Apply migrations and (optionally) seed demo users:
+Then run:
 
 ```bash
 python manage.py migrate
 python manage.py seed_demo_users
-python manage.py runserver
-```
-
-API available at http://127.0.0.1:8000
-
----
-
-## Environment Variables
-
-See this folder's `.env.example` or the root README for all required variables.
-
----
-
-## Testing
-
-```bash
-python manage.py test -v 2
-```
-
-2. Create a virtual environment.
-
-```bash
-python -m venv venv
-```
-
-3. Activate the virtual environment.
-
-Windows (PowerShell):
-
-```bash
-venv\Scripts\Activate.ps1
-```
-
-macOS/Linux:
-
-```bash
-source venv/bin/activate
-```
-
-4. Install dependencies from the requirements file.
-
-```bash
-pip install -r requirements.txt
-```
-
-5. Create a local environment file with at least a secret key.
-
-```bash
-echo SECRET_KEY=replace-this-with-a-real-key > .env
-```
-
-6. Set up the database.
-
-```bash
-python manage.py migrate
-```
-
-Optional demo users:
-
-```bash
-python manage.py seed_demo_users
-```
-
-7. Run the backend server.
-
-```bash
 python manage.py runserver
 ```
 
@@ -115,27 +47,25 @@ Backend URL:
 http://127.0.0.1:8000
 ```
 
+## Testing
+
+```bash
+python manage.py test -v 2
+```
+
 ## Demo Users
 
-If you ran `python manage.py seed_demo_users`, the following test accounts are available:
+```text
+admin_demo    / Admin@123    / admin
+teacher_demo  / Teacher@123  / teacher
+student_demo  / Student@123  / student
+```
 
-| Username | Password | Role |
-|----------|----------|------|
-| `admin_demo` | `Admin@123` | Admin |
-| `teacher_demo` | `Teacher@123` | Teacher |
-| `student_demo` | `Student@123` | Student |
+## Notes
 
-Use these credentials to test role-based features in the frontend.
-
-## Render Deployment Note
-
-If your Render service does not provide shell access, you can seed demo users
-at startup by appending the script to your Start Command.
-
-Example Start Command:
+- Check `.env.example` or the root README for env settings.
+- On Render, you can seed demo users in the start command if needed.
 
 ```bash
 python seed_users.py && daphne -b 0.0.0.0 -p $PORT config.asgi:application
 ```
-
-The script is idempotent: it only creates missing demo users.

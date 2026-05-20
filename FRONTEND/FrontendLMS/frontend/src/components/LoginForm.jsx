@@ -7,10 +7,6 @@ const USER_PROFILES = {
   3: { username: "student_demo" },
 };
 
-/**
- * LoginForm: Authentication interface
- * Handles: User profile selection, password input, login submission
- */
 function LoginForm({ onSubmit, authError, authMessage, isLoading = false }) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [showDemoCreds, setShowDemoCreds] = useState(false);

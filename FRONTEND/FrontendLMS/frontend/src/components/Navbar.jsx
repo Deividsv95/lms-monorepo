@@ -1,10 +1,6 @@
 import { NavLink } from "react-router-dom";
 import styles from "./TopBar.module.css";
 
-/**
- * Navbar: Navigation and user status display
- * Handles: Route links, role label, logout action
- */
 function Navbar({ roleLabel, user, onLogout }) {
   return (
     <header className={styles.topbar} role="banner">

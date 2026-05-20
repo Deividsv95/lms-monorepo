@@ -261,6 +261,9 @@ function App() {
       wsRef.current = null;
     }
 
+    // wipe tokens and bounce back home
+    clearSessionUser();
+
     setUser(null);
     setCourses([]);
     setUsers([]);
@@ -270,6 +273,7 @@ function App() {
     setAuthMessage("Logged out.");
     setEnrollingCourseId(null);
     setJustEnrolledIds(new Set());
+    navigate("/");
   }
 
   async function handleSessionStart(credentials) {

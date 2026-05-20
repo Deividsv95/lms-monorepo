@@ -128,3 +128,18 @@ npm run build
 Backend environment setup is documented in [BACKEND/backend/django_lms/README.md](BACKEND/backend/django_lms/README.md).
 
 The frontend does not need a `.env` file by default.
+
+
+
+
+## Developer Notes & Retrospective
+
+Building this LMS was a huge learning curve. The biggest challenge was taking the original, massive vanilla JavaScript file and breaking it down into clean, modular React components while keeping the student, teacher, and admin roles separate. 
+
+The backend was a massive hurdle, especially since it was my first time using Render to deploy a Python API. Getting the GitHub Pages frontend and the Render backend container to actually communicate with each other was incredibly challenging due to cross-origin issues and deployment mismatches. To debug it, I relied heavily on VS Code to trace exactly what the code was doing step-by-step. I had to look back through a ton of my old personal notes and previous course lessons to fix countless layout and connection mistakes. When I got stuck, I turned to a current LMS used in my workplace to to have a rough idea of what i wanted to achieve i also used Google, YouTube, and social media developer communities for inspiration and troubleshooting help. Because of those bottlenecks, I ended up having to rewrite and simplify a lot of the code to strip out unnecessary complexity and finally get the connection stable. 
+
+Getting the student enrollment flow to instantly update the dashboard layout took some serious work with React state lifecycles. But after all the simplification and plenty of long nights, everything connects perfectly now, the app runs smoothly, and I am incredibly happy with how the project turned out!
+
+
+### What I Would Add Next (Future Scopes)
+Given more time, my next priority would be adding a student progress tracker to visualize course completion percentages and actual course material that could be used. I would also like to implement soft-deletes for courses so that teachers don’t accidentally wipe out student enrollment histories, and add a simple profile picture upload feature to make the profiles more authentic to the user. Visually i would like to add page transitions to give it a more premium look.

@@ -1,66 +1,48 @@
 
 # LMS Monorepo
 
-A fullstack, role-based **Learning Management System** built as a monorepo. Students browse and enroll in courses, teachers manage their own content, and admins oversee the entire platform — all in real time via WebSocket updates.
+This is a fullstack LMS project with separate backend and frontend apps in one repo. Students can browse and enroll in courses, teachers can manage their own courses, and admins can manage courses and users.
 
----
+## Project Structure
 
-## Project Overview
-
-This repository contains both the backend (Django REST API + WebSocket server) and frontend (React + Vite SPA) for a complete LMS platform.
-
-**Roles:**
-- Students: Browse and enroll in courses
-- Teachers: Create and manage their own courses
-- Admins: Manage users and all courses
-
----
-
-## Repository Structure
-
-```
+```text
 lms-monorepo/
-├── BACKEND/backend/django_lms/   # Django REST API + WebSocket server
-└── FRONTEND/FrontendLMS/         # React + Vite single-page application
+├── BACKEND/backend/django_lms/
+└── FRONTEND/FrontendLMS/
 ```
 
-For backend- or frontend-specific setup, see:
+More setup details:
 - [BACKEND/backend/django_lms/README.md](BACKEND/backend/django_lms/README.md)
 - [FRONTEND/FrontendLMS/README.md](FRONTEND/FrontendLMS/README.md)
 
----
+## Stack
 
-## Tech Stack
+Backend:
+- Python
+- Django
+- Django REST Framework
+- JWT auth
+- Channels
 
-**Backend:** Python 3.10+, Django 4.2, Django REST Framework, JWT (SimpleJWT), Django Channels 4 + Daphne, SQLite/PostgreSQL, python-decouple
+Frontend:
+- React
+- Vite
+- CSS
 
-**Frontend:** React 18, Vite 5, plain CSS, fetch (REST/WebSocket)
+## Main Features
 
----
+- Login with JWT
+- Student course browsing and enrollment
+- Teacher course create, update, and delete
+- Admin course and user management
+- Real-time course updates with WebSockets
 
-## How It Works
+## Links
 
-**Frontend ↔ Backend:**
-- REST API for authentication, course/user CRUD
-- WebSocket for real-time course updates
+- Frontend: https://deividsv95.github.io/
+- Backend: https://lms-monorepo-zrob.onrender.com/api/v1/
 
-**Authentication:**
-1. Login via `/api/auth/login/` (returns JWT tokens)
-2. All API requests use `Authorization: Bearer <access>`
-3. WebSocket connects with `?token=<access_token>`
-
----
-
-## Deployment
-
-| Service   | URL                                               |
-|-----------|---------------------------------------------------|
-| Frontend  | https://deividsv95.github.io/                     |
-| Backend   | https://lms-monorepo-zrob.onrender.com/api/v1/    |
-
----
-
-## Quickstart
+## Quick Start
 
 ### Backend
 
@@ -72,18 +54,21 @@ python -m venv venv
 pip install -r requirements.txt
 ```
 
-Create `.env` with at least:
-```
+Create a `.env` file with at least:
+
+```text
 SECRET_KEY=replace-this-with-a-real-key
 ```
 
+Then run:
+
 ```bash
 python manage.py migrate
-python manage.py seed_demo_users   # optional demo accounts
+python manage.py seed_demo_users
 python manage.py runserver
 ```
 
-API: http://127.0.0.1:8000
+Backend runs at `http://127.0.0.1:8000`
 
 ### Frontend
 
@@ -93,62 +78,53 @@ npm install
 npm run dev
 ```
 
-App: http://localhost:5173
-
----
+Frontend runs at `http://localhost:5173`
 
 ## Demo Accounts
 
-| Username        | Password     | Role    |
-|-----------------|-------------|---------|
-| admin_demo      | Admin@123   | Admin   |
-| teacher_demo    | Teacher@123 | Teacher |
-| student_demo    | Student@123 | Student |
+```text
+admin_demo    / Admin@123    / admin
+teacher_demo  / Teacher@123  / teacher
+student_demo  / Student@123  / student
+```
 
----
+## Testing
 
-## Testing Procedures
+Backend tests:
 
-Run backend Django integration tests:
 ```bash
 cd BACKEND/backend/django_lms
-# activate venv first
 python manage.py test
 ```
 
-Run frontend React smoke tests:
+Frontend tests:
+
 ```bash
 cd FRONTEND/FrontendLMS
 npm install
 npm run test
 ```
 
-Optional API endpoint checks from the frontend scripts:
+Optional API script:
+
 ```powershell
 cd FRONTEND/FrontendLMS
 powershell -ExecutionPolicy Bypass -File .\run_tests.ps1 -BaseUrl http://localhost:8000
 ```
 
-Validate production build:
+Production build:
+
 ```bash
 cd FRONTEND/FrontendLMS
 npm run build
 ```
 
----
-
-## UI Wireframes
-
-Dashboard wireframe:
+## Wireframe
 
 ![Wireframe](./wireframe.png)
 
----
-
 ## Environment Variables
 
-**Backend:**
-See `BACKEND/backend/django_lms/README.md` for all required variables.
+Backend environment setup is documented in [BACKEND/backend/django_lms/README.md](BACKEND/backend/django_lms/README.md).
 
-**Frontend:**
-No `.env` required. To override the API base URL at runtime, set `window.API_BASE` in the HTML before the app script tag.
+The frontend does not need a `.env` file by default.

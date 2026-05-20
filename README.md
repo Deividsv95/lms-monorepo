@@ -107,26 +107,41 @@ App: http://localhost:5173
 
 ---
 
-## Testing
+## Testing Procedures
 
-**Backend:**
+Run backend Django integration tests:
 ```bash
 cd BACKEND/backend/django_lms
 # activate venv first
-python manage.py test -v 2
+python manage.py test
 ```
 
-**Frontend/API:**
+Run frontend React smoke tests:
+```bash
+cd FRONTEND/FrontendLMS
+npm install
+npm run test
+```
+
+Optional API endpoint checks from the frontend scripts:
 ```powershell
 cd FRONTEND/FrontendLMS
 powershell -ExecutionPolicy Bypass -File .\run_tests.ps1 -BaseUrl http://localhost:8000
 ```
 
-**Frontend build:**
+Validate production build:
 ```bash
 cd FRONTEND/FrontendLMS
 npm run build
 ```
+
+---
+
+## UI Wireframes
+
+Dashboard wireframe:
+
+![Wireframe](./wireframe.png)
 
 ---
 

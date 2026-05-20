@@ -1,0 +1,168 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1700" height="1180" viewBox="0 0 1700 1180" role="img" aria-labelledby="title desc">
+  <title id="title">LMS App Accurate Wireframe Map</title>
+  <desc id="desc">Three route-level wireframes matching the implemented React app: Home dashboard, Courses catalog, and Management workspace.</desc>
+
+  <rect width="1700" height="1180" fill="#f2f2f2"/>
+
+  <style>
+    .outer { fill: #ffffff; stroke: #171717; stroke-width: 2; }
+    .box { fill: #ececec; stroke: #2c2c2c; stroke-width: 1.4; }
+    .soft { fill: #f7f7f7; stroke: #444; stroke-width: 1.1; }
+    .title { font-family: Arial, sans-serif; font-size: 22px; font-weight: 700; fill: #111; }
+    .sub { font-family: Arial, sans-serif; font-size: 16px; font-weight: 700; fill: #111; }
+    .label { font-family: Arial, sans-serif; font-size: 13px; fill: #1d1d1d; }
+    .tiny { font-family: Arial, sans-serif; font-size: 11px; fill: #2b2b2b; }
+  </style>
+
+  <text x="36" y="42" class="title">LMS Frontend Wireframe (Matched to App.jsx + Components)</text>
+  <text x="36" y="64" class="label">Header is global; route content swaps inside main layout area.</text>
+
+  <text x="44" y="104" class="sub">Screen 1: Home Route (/)</text>
+  <rect x="34" y="114" width="530" height="1030" rx="14" class="outer"/>
+
+  <rect x="52" y="140" width="494" height="86" rx="10" class="outer"/>
+  <text x="66" y="162" class="tiny">Navbar (global)</text>
+  <rect x="66" y="172" width="120" height="18" rx="4" class="soft"/>
+  <text x="70" y="185" class="tiny">LMS Portal</text>
+  <rect x="198" y="172" width="72" height="18" rx="4" class="box"/>
+  <text x="212" y="185" class="tiny">Home</text>
+  <rect x="278" y="172" width="80" height="18" rx="4" class="soft"/>
+  <text x="293" y="185" class="tiny">Courses</text>
+  <rect x="366" y="172" width="92" height="18" rx="4" class="soft"/>
+  <text x="378" y="185" class="tiny">Management</text>
+  <rect x="420" y="196" width="58" height="16" rx="4" class="soft"/>
+  <text x="426" y="208" class="tiny">Student</text>
+  <rect x="484" y="196" width="48" height="16" rx="4" class="soft"/>
+  <text x="490" y="208" class="tiny">Logout</text>
+
+  <rect x="52" y="238" width="494" height="286" rx="10" class="outer"/>
+  <text x="66" y="260" class="tiny">Dashboard Hero / Session Card</text>
+  <rect x="66" y="272" width="300" height="20" rx="4" class="soft"/>
+  <text x="70" y="286" class="tiny">Welcome, username</text>
+  <rect x="66" y="302" width="110" height="74" rx="6" class="box"/>
+  <rect x="184" y="302" width="110" height="74" rx="6" class="box"/>
+  <rect x="302" y="302" width="110" height="74" rx="6" class="box"/>
+  <text x="74" y="322" class="tiny">Active Role</text>
+  <text x="192" y="322" class="tiny">Visible Courses</text>
+  <text x="310" y="322" class="tiny">Your Enrollments</text>
+  <rect x="66" y="392" width="210" height="110" rx="6" class="soft"/>
+  <text x="74" y="410" class="tiny">Session Info</text>
+  <text x="74" y="428" class="tiny">Username: teacher_demo</text>
+  <text x="74" y="444" class="tiny">Visible Courses: ...</text>
+  <rect x="74" y="456" width="92" height="16" rx="4" class="box"/>
+  <text x="80" y="468" class="tiny">Refresh</text>
+  <rect x="174" y="456" width="90" height="16" rx="4" class="box"/>
+  <text x="180" y="468" class="tiny">End Session</text>
+
+  <rect x="52" y="536" width="494" height="278" rx="10" class="outer"/>
+  <text x="66" y="558" class="tiny">Your Enrollments (student only)</text>
+  <rect x="436" y="546" width="90" height="18" rx="4" class="soft"/>
+  <text x="454" y="559" class="tiny">Refresh</text>
+  <rect x="66" y="570" width="466" height="74" rx="6" class="soft"/>
+  <text x="74" y="588" class="tiny">Title</text>
+  <text x="74" y="604" class="tiny">Description</text>
+  <text x="74" y="620" class="tiny">Teacher: created_by_username</text>
+  <rect x="66" y="654" width="466" height="74" rx="6" class="soft"/>
+  <text x="74" y="672" class="tiny">Title</text>
+  <text x="74" y="688" class="tiny">Description</text>
+  <text x="74" y="704" class="tiny">Teacher: created_by_username</text>
+
+  <rect x="52" y="826" width="494" height="302" rx="10" class="outer"/>
+  <text x="66" y="848" class="tiny">Route notes</text>
+  <text x="66" y="868" class="tiny">- No sidebar in implemented layout (top nav only).</text>
+  <text x="66" y="886" class="tiny">- Main route rendered inside &lt;main class='layout'&gt;.</text>
+  <text x="66" y="904" class="tiny">- Guest state shows Sign In panel.</text>
+  <text x="66" y="922" class="tiny">- Student gets extra enrollments section.</text>
+
+  <text x="594" y="104" class="sub">Screen 2: Courses Route (/courses)</text>
+  <rect x="584" y="114" width="530" height="1030" rx="14" class="outer"/>
+
+  <rect x="602" y="140" width="494" height="86" rx="10" class="outer"/>
+  <text x="616" y="162" class="tiny">Navbar (global)</text>
+  <rect x="748" y="172" width="80" height="18" rx="4" class="box"/>
+  <text x="764" y="185" class="tiny">Courses</text>
+  <rect x="934" y="196" width="58" height="16" rx="4" class="soft"/>
+  <text x="940" y="208" class="tiny">Student</text>
+
+  <rect x="602" y="238" width="494" height="864" rx="10" class="outer"/>
+  <text x="616" y="260" class="tiny">Available Courses section</text>
+  <rect x="1008" y="248" width="70" height="18" rx="4" class="soft"/>
+  <text x="1024" y="261" class="tiny">Refresh</text>
+
+  <rect x="616" y="278" width="148" height="230" rx="8" class="soft"/>
+  <rect x="775" y="278" width="148" height="230" rx="8" class="soft"/>
+  <rect x="934" y="278" width="148" height="230" rx="8" class="soft"/>
+  <text x="624" y="298" class="tiny">Title</text>
+  <text x="624" y="314" class="tiny">Description</text>
+  <text x="624" y="330" class="tiny">Course #id</text>
+  <text x="624" y="346" class="tiny">Created by: username</text>
+  <rect x="624" y="356" width="120" height="16" rx="4" class="box"/>
+  <text x="664" y="368" class="tiny">Enroll</text>
+
+  <text x="616" y="540" class="tiny">Enrollment button state pipeline</text>
+  <rect x="616" y="552" width="112" height="22" rx="5" class="box"/>
+  <text x="656" y="567" class="tiny">Enroll</text>
+  <text x="738" y="567" class="tiny">-&gt;</text>
+  <rect x="760" y="552" width="154" height="22" rx="5" class="soft"/>
+  <text x="786" y="567" class="tiny">Securing seat...</text>
+  <text x="924" y="567" class="tiny">-&gt;</text>
+  <rect x="944" y="552" width="138" height="22" rx="5" class="box"/>
+  <text x="952" y="567" class="tiny">View Your Enrollments -&gt;</text>
+
+  <rect x="616" y="598" width="466" height="250" rx="8" class="outer"/>
+  <text x="628" y="620" class="tiny">Card anatomy reference</text>
+  <rect x="628" y="632" width="442" height="58" rx="6" class="soft"/>
+  <text x="638" y="648" class="tiny">course-title</text>
+  <text x="638" y="664" class="tiny">course-meta description</text>
+  <text x="638" y="680" class="tiny">course-meta created_by_username</text>
+
+  <text x="1144" y="104" class="sub">Screen 3: Management Route (/management)</text>
+  <rect x="1134" y="114" width="530" height="1030" rx="14" class="outer"/>
+
+  <rect x="1152" y="140" width="494" height="86" rx="10" class="outer"/>
+  <text x="1166" y="162" class="tiny">Navbar (global)</text>
+  <rect x="1334" y="172" width="92" height="18" rx="4" class="box"/>
+  <text x="1347" y="185" class="tiny">Management</text>
+  <rect x="1508" y="196" width="58" height="16" rx="4" class="soft"/>
+  <text x="1514" y="208" class="tiny">Admin</text>
+
+  <rect x="1152" y="238" width="494" height="864" rx="10" class="outer"/>
+  <text x="1166" y="260" class="tiny">Course and User Management</text>
+
+  <rect x="1166" y="274" width="466" height="154" rx="8" class="soft"/>
+  <text x="1178" y="294" class="tiny">Create Course</text>
+  <rect x="1178" y="304" width="210" height="18" rx="4" class="box"/>
+  <text x="1184" y="317" class="tiny">Title input</text>
+  <rect x="1178" y="330" width="442" height="54" rx="4" class="box"/>
+  <text x="1184" y="344" class="tiny">Description textarea</text>
+  <rect x="1178" y="390" width="96" height="16" rx="4" class="box"/>
+  <text x="1184" y="402" class="tiny">Create Course</text>
+
+  <rect x="1166" y="438" width="466" height="186" rx="8" class="soft"/>
+  <text x="1178" y="458" class="tiny">Update Course</text>
+  <rect x="1178" y="468" width="180" height="18" rx="4" class="box"/>
+  <text x="1184" y="481" class="tiny">Course select</text>
+  <rect x="1178" y="494" width="210" height="18" rx="4" class="box"/>
+  <text x="1184" y="507" class="tiny">Title input</text>
+  <rect x="1178" y="520" width="442" height="54" rx="4" class="box"/>
+  <text x="1184" y="534" class="tiny">Description textarea</text>
+  <rect x="1178" y="580" width="94" height="16" rx="4" class="box"/>
+  <text x="1184" y="592" class="tiny">Update Course</text>
+
+  <rect x="1166" y="634" width="466" height="196" rx="8" class="soft"/>
+  <text x="1178" y="654" class="tiny">Admin User Controls</text>
+  <rect x="1178" y="666" width="442" height="22" rx="4" class="box"/>
+  <text x="1184" y="681" class="tiny">User ID | Username | Email | Role | Actions</text>
+  <rect x="1178" y="692" width="442" height="24" rx="4" class="soft"/>
+  <text x="1184" y="708" class="tiny">1 | admin_demo | admin@email | admin | [Update User] [Delete User]</text>
+  <rect x="1178" y="720" width="442" height="24" rx="4" class="soft"/>
+  <text x="1184" y="736" class="tiny">2 | teacher_demo | ... | teacher | [Update User] [Delete User]</text>
+  <rect x="1178" y="748" width="442" height="24" rx="4" class="soft"/>
+  <text x="1184" y="764" class="tiny">3 | student_demo | ... | student | [Update User] [Delete User]</text>
+  <rect x="1178" y="782" width="96" height="16" rx="4" class="box"/>
+  <text x="1184" y="794" class="tiny">Update User</text>
+  <rect x="1280" y="782" width="88" height="16" rx="4" class="box"/>
+  <text x="1286" y="794" class="tiny">Delete User</text>
+
+  <text x="36" y="1162" class="label">This blueprint now mirrors real app structure: global top navbar, route-driven content, student enrollment states, and teacher/admin management forms.</text>
+</svg>

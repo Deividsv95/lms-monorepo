@@ -12,6 +12,7 @@ from .views import (
 )
 
 urlpatterns = [
+    path("courses/", StudentCourseListView.as_view(), name="courses"),
     path("student/courses/", StudentCourseListView.as_view(), name="student-courses"),
     path("student/enroll/<int:course_id>/", StudentEnrollView.as_view(), name="student-enroll"),
     path("student/enrolled-courses/", StudentEnrolledCoursesView.as_view(), name="student-enrolled-courses"),
